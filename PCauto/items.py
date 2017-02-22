@@ -23,3 +23,5 @@ class PCautoBrandPictureUrlItem(BaseItem):
 class PCautoBrandConfigItem(BaseItem):
     pass
 
+class PCautoBrandbaojiaUrlItem(BaseItem):
+    pass

@@ -10,6 +10,7 @@ from scrapy.utils.log import configure_logging
 from spiders.PCauto_start_urls import PCautoBrandListUrlSpider
 from spiders.PCauto_brandinfo import PCautoBrandinfoSpider
 from spiders.PCauto_brandconfig import PCautoBrandConfigSpider
+from spiders.PCauto_brandbaojia import PCautoBrandBaojiaSpider
 
 # import os
 import pymongo
@@ -18,7 +19,7 @@ import pymongo
 # the spider we need to scheduler
 # ArticleSpider = AutohomeArticleSpider()
 # BaikeSpider = AutohomeBaikeSpider()
-# BaojiaUrlSpider = AutohomeBaojiaSpider()
+BaojiaUrlSpider = PCautoBrandBaojiaSpider()
 ConfigSpider = PCautoBrandConfigSpider()
 BrandInfoSpider = PCautoBrandinfoSpider()
 # BrandListUrlSpider = AutohomeBrandListUrlSpider()
@@ -56,13 +57,15 @@ def crawl():
     # yield runner.crawl(UrlSpider)
     # yield runner.crawl(BrandListUrlSpider)
     # yield runner.crawl(DealerlistSpider)
-    # yield runner.crawl(BrandInfoSpider)
     # yield runner.crawl(BaikeSpider)
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(DetailedVehicleUrlSpider)
-    yield runner.crawl(ConfigSpider)
     # # yield runner.crawl(ForumSpider)
+
     # yield runner.crawl(PCautoStartSpider)
+    # yield runner.crawl(BrandInfoSpider)
+    # yield runner.crawl(ConfigSpider)
+    yield runner.crawl(BaojiaUrlSpider)
     reactor.stop()
 
 

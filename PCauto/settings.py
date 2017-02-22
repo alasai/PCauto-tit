@@ -66,7 +66,8 @@ ROBOTSTXT_OBEY = True
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    # 'PCauto.pipelines.BrandInfoPipeline': 300,
-   'PCauto.pipelines.BrandConfigPipeline': 301,
+   # 'PCauto.pipelines.BrandConfigPipeline': 301,
+   'PCauto.pipelines.BrandBaojiaPipeline': 302,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

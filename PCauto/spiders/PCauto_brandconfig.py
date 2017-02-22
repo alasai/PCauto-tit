@@ -38,7 +38,7 @@ class PCautoBrandConfigSpider(RedisSpider):
 
     def spider_idle(self):
         """This function is to stop the spider"""
-        self.logger.info('the queue is empty, wait for one minute to close the spider')
+        self.logger.info('the queue is empty, wait for half minute to close the spider')
         time.sleep(30)
         req = self.next_requests()
 

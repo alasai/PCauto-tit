@@ -21,3 +21,11 @@ def get_config_url():
         if 'config_url' in brand.keys():
             starturls.add(brand['config_url'])
     return starturls
+
+def get_baojia_url():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'baojia_url' in brand.keys():
+            starturls.add(brand['baojia_url'])
+    return starturls
