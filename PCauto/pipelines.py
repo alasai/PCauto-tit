@@ -42,15 +42,25 @@ def check_spider_pipeline(process_item_method):
 
     return wrapper
 
+# take out the mongodb connecting method
 def get_mongo_collection(key):
     connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
     db = connection[settings['MONGODB_DB']]
     return db.get_collection(key)
 
-class BrandInfoPipeline(object):
 
+class BrandInfoPipeline(object):
     def __init__(self):
         self.collection = get_mongo_collection('BrandInfo')
+
+    @check_spider_pipeline
+    def process_item(self, item, spider):
+        self.collection.insert(dict(item))
+        return item
+
+class PicUrlPipeline(object):
+    def __init__(self):
+        self.collection = get_mongo_collection('Picture')
 
     @check_spider_pipeline
     def process_item(self, item, spider):

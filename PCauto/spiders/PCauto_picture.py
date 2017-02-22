@@ -6,14 +6,14 @@ from bs4 import BeautifulSoup
 import re
 import time
 import json
-from xcar_tit.items import XcarBrandpictureUrlItem
-from xcar_tit import pipelines
+from PCauto.items import PCautoBrandPictureUrlItem
+from PCauto.pipelines import PicUrlPipeline
 
-class XcarBrandPictureSpider(RedisSpider):
-    name = 'xcar_pic'
+class PCautoBrandPictureSpider(RedisSpider):
+    name = 'PCauto_pic'
     pic_url='http://newcar.xcar.com.cn/photo/'
     api_url='http://newcar.xcar.com.cn%s'
-    pipeline = set([pipelines.XcarPicturePipeline, ])
+    pipeline = set([PicUrlPipeline, ])
 
     def start_requests(self):
         yield Request(self.pic_url,callback=self.get_letter)
@@ -104,7 +104,7 @@ class XcarBrandPictureSpider(RedisSpider):
 
 
     def get_url(self,response):
-        result=XcarBrandpictureUrlItem()
+        result=PCautoBrandPictureSpider()
         soup = BeautifulSoup(response.body_as_unicode())
         tit=soup.find('title').get_text()
         crumb_nt=soup.find('div',class_="atlas_nav")

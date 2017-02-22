@@ -5,16 +5,17 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
 
-import scrapy
 from scrapy.item import Item,Field
 
-class PcautoItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
-class PCautoBrandinfoItem(Item):
-    tit=Field()
-    url=Field()
+class BaseItem(Item):
+    tit = Field()
+    url = Field()
     address = Field()
     category = Field()
+
+
+class PCautoBrandinfoItem(BaseItem):
+    pass
+
+class PCautoBrandPictureUrlItem(BaseItem):
+    pass
