@@ -8,7 +8,7 @@ import re
 from PCauto.mongodb import mongoservice
 
 class PCautoBrandListUrlSpider(RedisSpider):
-    name="PCauto"
+    name="PCauto_start"
     get_brand_url = 'http://price.pcauto.com.cn/cars/'
     # api_brand_url = 'http://www.autohome.com.cn/grade/carhtml/%s.html'
 
@@ -35,10 +35,23 @@ class PCautoBrandListUrlSpider(RedisSpider):
     def get_car_info(self,response):
         info = response.body_as_unicode()
         soup = BeautifulSoup(info, 'lxml')
-        bid = response.meta['bid']
-        cid = response.meta['cid']
-        result = dict()
 
+        # start save brandinfo,no longer crawl this page again.
+        result_brandInfo = dict()
+        result_brandInfo['category'] = '车系首页'
+        result_brandInfo['url'] = response.url
+        result_brandInfo['tit'] = soup.find('title').get_text().strip()
+        place=soup.find('div',class_="position").find('div',class_="pos-mark")
+        if place:
+            text=place.get_text().strip().replace('\n','')
+            result_brandInfo['address'] = text
+
+        put_result = json.dumps(dict(result_brandInfo), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
+        save_result = json.loads(put_result)
+        mongoservice.save_brandInfo(save_result)
+
+        # start save brand_list
+        result = dict()
         nav_top = soup.find('div',id='JfixedTop')
         li_info = nav_top.find_all('li')
         config = li_info[1].find('a')
@@ -101,8 +114,9 @@ class PCautoBrandListUrlSpider(RedisSpider):
             forum_url = forum.get('href')
             result['forum_url'] = forum_url
 
-        result['bid']=bid
-        result['cid']=cid
+        result['bid'] = response.meta['bid']
+        result['cid'] = response.meta['cid']
+
         put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
         save_result = json.loads(put_result)
         mongoservice.save_brandlist(save_result)

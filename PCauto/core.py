@@ -8,17 +8,18 @@ from scrapy.conf import settings
 from scrapy.utils.log import configure_logging
 
 from spiders.PCauto_start_urls import PCautoBrandListUrlSpider
+from spiders.PCauto_brandinfo import PCautoBrandinfoSpider
 
-import os
+# import os
 import pymongo
-import json
+# import json
 
 # the spider we need to scheduler
 # ArticleSpider = AutohomeArticleSpider()
 # BaikeSpider = AutohomeBaikeSpider()
 # BaojiaUrlSpider = AutohomeBaojiaSpider()
 # ConfigSpider = AutohomeConfigSpider()
-# BrandInfoSpider = AutohomeBrandInfoSpider()
+BrandInfoSpider = PCautoBrandinfoSpider()
 # BrandListUrlSpider = AutohomeBrandListUrlSpider()
 # CarStoreSpider = AutohomeCarStoreSpider()
 # DealerSpider = AutohomeDealerSpider()

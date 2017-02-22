@@ -13,3 +13,8 @@ class PcautoItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
+class PCautoBrandinfoItem(Item):
+    tit=Field()
+    url=Field()
+    address = Field()
+    category = Field()
