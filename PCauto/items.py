@@ -19,3 +19,7 @@ class PCautoBrandinfoItem(BaseItem):
 
 class PCautoBrandPictureUrlItem(BaseItem):
     pass
+
+class PCautoBrandConfigItem(BaseItem):
+    pass
+
