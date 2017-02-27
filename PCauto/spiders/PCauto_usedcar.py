@@ -12,74 +12,59 @@ from PCauto.mongodb import mongoservice
 
 class PCautoUsedcarSpider(RedisSpider):
     name = 'PCauto_usedcar'
-    get_url = 'http://used.xcar.com.cn/search/'
-    api_url='http://used.xcar.com.cn%s'
+    api_url = 'https://www.guazi.com%s'
     pipeline = set([pipelines.UsedCarPipeline, ])
 
 
     def start_requests(self):
-        config_urls = mongoservice.get_usedcar_url()()
+        config_urls = mongoservice.get_usedcar_url()
         for url in config_urls:
             yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
-            yield Request(url, callback=self.get_usedcar)
+            yield Request(url, callback=self.get_url)
 
+    def get_vehicleTypes(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        
+        vehicles = soup.find('div', class_="list").find_all('li')
+        for vehicle in vehicles:
+            href = vehicle.find('p', class_='infoBox').find('a').get('href')
+            yield Request(self.api_url % href, callback = self.get_usedcar)
 
-    def get_letter(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        pbid_ul=soup.find('div',class_="option_wrap option_divs clearfix").find('div',class_="option").find('ul',class_="pbid_ul")
-        li_info=pbid_ul.find_all('li')
-        for li in li_info[1:]:
-            href=li.find('a').get('href')
-            yield Request(self.api_url%href,callback=self.get_vehicle)
-
-
-    def get_vehicle(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        pserid_ul=soup.find('div',class_="option_wrap clearfix").find('div',class_="option").find('ul',class_="pserid_ul")
-        li_info=pserid_ul.find_all('li')
-        for li in li_info[1:]:
-            cid=li.get('value')
-            if '#' in cid:
-                continue
-            href=li.find('a').get('href')
-            yield Request(self.api_url%href,callback=self.get_page_usedcar)
-
-
-    def get_page_usedcar(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        count=soup.find('div',class_="newcar_top").find('span',class_="car_source").find('b').get_text()
-        if int(count)!=0:
-            num=math.ceil(float(count)/40)
-            page_amount=int(num)
-            for page_num in range(1,page_amount+1):
-                url='%s?page=%d'%(response.url,page_num)
-                yield Request(url,callback=self.get_usedcar_list)
-
-
-    def get_usedcar_list(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        ul_info=soup.find('ul',class_="cal_ul clearfix")
-        if ul_info:
-            li_info=ul_info.find_all('li',class_="li_hover")
-            for li in li_info:
-                href=li.find('div',class_="cal_main").find('p',class_="cal_main_title").find('a').get('href')
-                style=li.find('div',class_="cal_main").find('p',class_="cal_main_title").find('a').get('title')
-                yield Request(self.api_url%href,callback=self.get_usedcar)
+        next_page = soup.find('div', class_='pageBox').find('a', class_='next')
+        if next_page:
+            next_page_url = next_page.get('href')
+            yield Request(self.api_url % next_page_url, callback = self.get_vehicleTypes)
 
 
     def get_usedcar(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        result = PCautoUsedCarItem()
-        url = response.url
-        tit = soup.find('title').get_text().strip()
-        place = soup.find('div', class_="place")
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        result = PCautoBrandbaojiaUrlItem()
+
+        result['category'] = '二手车'
+        result['url'] = response.url
+        result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div',class_="crumbs")
         if place:
-            text = place.get_text().strip()
-            add = text.split(':')
-            result['address'] = add[1]
-        result['category'] = '车系-二手车'
-        result['tit'] = tit
-        result['url'] = url
+            text = place.get_text().strip().replace('\n','')
+            result['address'] = text
+
+        yield result
+
+
+    def get_url(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        result = PCautoBrandbaojiaUrlItem()
+
+        result['category'] = '二手车'
+        result['url'] = response.url
+        result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div',class_="position").find('div',class_="pos-mark")
+        if place:
+            text = place.get_text().strip().replace('\n','')
+            result['address'] = text
+
         yield result
 
 
