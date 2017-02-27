@@ -9,31 +9,31 @@ from PCauto.pipelines import ArticlePipeline
 from PCauto.mongodb import mongoservice
 
 class PCautoArticleSpider(RedisSpider):
-    name = 'PCauto_newcar'
-    api_url ='http://price.pcauto.com.cn%s'
+    name = 'PCauto_article'
+    api_url = 'http://price.pcauto.com.cn%s'
     pipeline = set([ArticlePipeline, ])
-
 
     def start_requests(self):
         article_urls = mongoservice.get_article_url()
         for url in article_urls:
-            yield Request(self.api_url, dont_filter=True, callback=self.get_articles)
+            yield Request(url, dont_filter=True, callback=self.get_articles)
             yield Request(url, callback=self.get_url)
 
     def get_articles(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        body = soup.find('div', class_='col-ab')
-        if body:
-            articles = body.find_all('div', class_="tab-item")
+        articles = soup.find_all('div', class_="tab-item")
+        if articles:
             for article in articles:
                 href = article.find('div', class_='txt').find('div', class_='tit').find('a').get('href')
                 yield Request(href, callback = self.get_url)
     
             # 下一页递归当前处理逻辑
-            next_page = body.find('div',class_='page').find('a', class_='next')
-            if next_page:
-                next_page_url = next_page.get('href')
-                yield Request(api_url % next_page_url, callback = self.get_articles)
+            pages = soup.find('div',class_='page')
+            if pages:
+                next_page = pages.find('a', class_='next')
+                if next_page:
+                    next_page_url = next_page.get('href')
+                    yield Request(self.api_url % next_page_url, callback = self.get_articles)
 
 
     def get_url(self,response):
@@ -45,15 +45,20 @@ class PCautoArticleSpider(RedisSpider):
         result['tit'] = soup.find('title').get_text().strip()
 
         # 车系页标签
-        place = soup.find('div',class_="position").find('div',class_="pos-mark")
+        place = soup.find('div',class_="position")
         if place:
-            text = place.get_text().strip().replace('\n','')
+            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
             result['address'] = text
 
         # 文章页标签
-        guide = soup.find('div',class_="guide").find('div',class_="crumbs")
+        guide = soup.find('div',class_="guide")
         if guide:
-            text = guide.get_text().strip().replace('\n','')
+            crumbs = guide.find('div',class_="crumbs")
+            if crumbs:
+                text = crumbs.get_text().strip().replace('\n','').replace('\r','')
+            else:
+                text = guide.find('span',class_="mark").get_text().strip().replace('\n','').replace('\r','')
+
             result['address'] = text
 
         yield result

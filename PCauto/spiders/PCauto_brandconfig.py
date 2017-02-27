@@ -26,9 +26,10 @@ class PCautoBrandConfigSpider(RedisSpider):
         result['category'] = '车系-参数配置'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
-        place=soup.find('div',class_="position").find('div',class_="pos-mark")
+
+        place = soup.find('div',class_="position")
         if place:
-            text=place.get_text().strip().replace('\n','')
+            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
             result['address'] = text
 
         yield result
