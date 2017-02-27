@@ -11,6 +11,7 @@ from spiders.PCauto_start_urls import PCautoBrandListUrlSpider
 from spiders.PCauto_brandinfo import PCautoBrandinfoSpider
 from spiders.PCauto_brandconfig import PCautoBrandConfigSpider
 from spiders.PCauto_brandbaojia import PCautoBrandBaojiaSpider
+from spiders.PCauto_usedcar import PCautoUsedcarSpider
 
 # import os
 import pymongo
@@ -39,7 +40,7 @@ PCautoStartSpider = PCautoBrandListUrlSpider()
 # OwnerpriceSpider = AutohomeOwnerpriceSpider()
 # PicUrlSpider = AutohomePicUrlSpider()
 # ShuoKeSpider = AutohomeShuoKeSpider()
-# UsedCarUrlSpider = AutohomeUsedCarUrlSpider()
+UsedCarUrlSpider = PCautoUsedcarSpider()
 # VideoUrlSpider = AutohomeVideoUrlSpider()
 # YouChuangSpider = AutohomeYouChuangSpider()
 # ZhiDaoUrlSpider = AutohomeZhiDaoUrlSpider()
@@ -54,18 +55,11 @@ runner = CrawlerRunner(settings)
 
 @defer.inlineCallbacks
 def crawl():
-    # yield runner.crawl(UrlSpider)
-    # yield runner.crawl(BrandListUrlSpider)
-    # yield runner.crawl(DealerlistSpider)
-    # yield runner.crawl(BaikeSpider)
-    # yield runner.crawl(ArticleSpider)
-    # yield runner.crawl(DetailedVehicleUrlSpider)
-    # # yield runner.crawl(ForumSpider)
-
     # yield runner.crawl(PCautoStartSpider)
     # yield runner.crawl(BrandInfoSpider)
     # yield runner.crawl(ConfigSpider)
-    yield runner.crawl(BaojiaUrlSpider)
+    # yield runner.crawl(BaojiaUrlSpider)
+    yield runner.crawl(UsedCarUrlSpider)
     reactor.stop()
 
 

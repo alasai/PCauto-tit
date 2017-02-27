@@ -17,15 +17,17 @@ class PCautoUsedcarSpider(RedisSpider):
 
 
     def start_requests(self):
-        config_urls = mongoservice.get_usedcar_url()
-        for url in config_urls:
+        usedcar_urls = mongoservice.get_usedcar_url()
+        for url in usedcar_urls:
             yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
             yield Request(url, callback=self.get_url)
 
+
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        
-        vehicles = soup.find('div', class_="list").find_all('li')
+
+        list = soup.find('div', class_="list")
+        vehicles = list.find_all('li')
         for vehicle in vehicles:
             href = vehicle.find('p', class_='infoBox').find('a').get('href')
             yield Request(self.api_url % href, callback = self.get_usedcar)
@@ -38,7 +40,7 @@ class PCautoUsedcarSpider(RedisSpider):
 
     def get_usedcar(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        result = PCautoBrandbaojiaUrlItem()
+        result = PCautoUsedCarItem()
 
         result['category'] = '二手车'
         result['url'] = response.url
@@ -54,7 +56,7 @@ class PCautoUsedcarSpider(RedisSpider):
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        result = PCautoBrandbaojiaUrlItem()
+        result = PCautoUsedCarItem()
 
         result['category'] = '二手车'
         result['url'] = response.url
