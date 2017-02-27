@@ -28,3 +28,6 @@ class PCautoBrandbaojiaUrlItem(BaseItem):
 
 class PCautoUsedCarItem(BaseItem):
     pass
+
+class PCautoBrandArticleItem(BaseItem):
+    pass

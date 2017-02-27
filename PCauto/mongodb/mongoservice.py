@@ -38,3 +38,11 @@ def get_usedcar_url():
             starturls.add(brand['used_car_url'])
     return starturls
 
+def get_article_url():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'article_url' in brand.keys():
+            starturls.add(brand['article_url'])
+    return starturls
+

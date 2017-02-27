@@ -26,7 +26,7 @@ class PCautoUsedcarSpider(RedisSpider):
     def get_vehicleList(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         guazi_url = soup.find('iframe').get('src')
-        yield Request(url, callback=self.get_vehicleTypes)
+        yield Request(guazi_url, callback=self.get_vehicleTypes)
 
 
     def get_vehicleTypes(self,response):
