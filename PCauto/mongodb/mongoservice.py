@@ -46,3 +46,10 @@ def get_article_url():
             starturls.add(brand['article_url'])
     return starturls
 
+def get_pic_url():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'pic_url' in brand.keys():
+            starturls.add(brand['pic_url'])
+    return starturls

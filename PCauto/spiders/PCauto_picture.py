@@ -3,11 +3,10 @@
 from scrapy_redis.spiders import RedisSpider
 from scrapy.http import Request
 from bs4 import BeautifulSoup
-import re
 import time
-import json
 from PCauto.items import PCautoBrandPictureUrlItem
 from PCauto.pipelines import PicUrlPipeline
+from PCauto.mongodb import mongoservice
 
 class PCautoBrandPictureSpider(RedisSpider):
     name = 'PCauto_pic'
@@ -16,8 +15,31 @@ class PCautoBrandPictureSpider(RedisSpider):
     pipeline = set([PicUrlPipeline, ])
 
     def start_requests(self):
+        pic_urls = mongoservice.get_pic_url()
+        for url in pic_urls:
+            yield Request(url, dont_filter=True, callback=self.get_types)
+            yield Request(url, callback=self.get_url)
+
         yield Request(self.pic_url,callback=self.get_letter)
 
+    def get_url(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        result = PCautoBrandPictureUrlItem()
+
+        result['category'] = 'tupian'
+        result['url'] = response.url
+        result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div',class_="position")
+        if place:
+            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
+            result['address'] = text
+
+        yield result
+
+    def get_types(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        all = soup.find_all('div',class_='all')
 
     def get_letter(self,response):
         soup = BeautifulSoup(response.body_as_unicode())
@@ -104,7 +126,7 @@ class PCautoBrandPictureSpider(RedisSpider):
 
 
     def get_url(self,response):
-        result=PCautoBrandPictureSpider()
+        result = PCautoBrandPictureUrlItem()
         soup = BeautifulSoup(response.body_as_unicode())
         tit=soup.find('title').get_text()
         crumb_nt=soup.find('div',class_="atlas_nav")
