@@ -25,3 +25,6 @@ class PCautoBrandConfigItem(BaseItem):
 
 class PCautoBrandbaojiaUrlItem(BaseItem):
     pass
+
+class PCautoUsedCarItem(BaseItem):
+    pass

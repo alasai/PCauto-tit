@@ -35,7 +35,7 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandbaojiaUrlItem()
 
-        result['category'] = '车系-报价'
+        result['category'] = '报价'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 

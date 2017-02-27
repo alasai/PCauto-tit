@@ -29,3 +29,12 @@ def get_baojia_url():
         if 'baojia_url' in brand.keys():
             starturls.add(brand['baojia_url'])
     return starturls
+
+def get_usedcar_url():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'used_car_url' in brand.keys():
+            starturls.add(brand['used_car_url'])
+    return starturls
+
