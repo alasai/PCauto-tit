@@ -19,8 +19,14 @@ class PCautoUsedcarSpider(RedisSpider):
     def start_requests(self):
         usedcar_urls = mongoservice.get_usedcar_url()
         for url in usedcar_urls:
-            yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
+            yield Request(url, dont_filter=True, callback=self.get_vehicleList)
             yield Request(url, callback=self.get_url)
+
+
+    def get_vehicleList(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        guazi_url = soup.find('iframe').get('src')
+        yield Request(url, callback=self.get_vehicleTypes)
 
 
     def get_vehicleTypes(self,response):
