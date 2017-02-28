@@ -10,7 +10,7 @@ from PCauto.mongodb import mongoservice
 
 class PCautoArticleSpider(RedisSpider):
     name = 'PCauto_newcar'
-    api_url='http://info.xcar.com.cn/'
+    api_url ='http://price.pcauto.com.cn%s'
     pipeline = set([ArticlePipeline, ])
 
 
@@ -22,61 +22,40 @@ class PCautoArticleSpider(RedisSpider):
 
     def get_articles(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-
-        list = soup.find('div', class_="list")
-        vehicles = list.find_all('li')
-        for vehicle in vehicles:
-            href = vehicle.find('p', class_='infoBox').find('a').get('href')
-            yield Request(self.api_url % href, callback = self.get_url)
-
-        next_page = soup.find('div', class_='pageBox').find('a', class_='next')
-        if next_page:
-            next_page_url = next_page.get('href')
-            yield Request(self.api_url % next_page_url, callback = self.get_articles)
+        body = soup.find('div', class_='col-ab')
+        if body:
+            articles = body.find_all('div', class_="tab-item")
+            for article in articles:
+                href = article.find('div', class_='txt').find('div', class_='tit').find('a').get('href')
+                yield Request(href, callback = self.get_url)
+    
+            # 下一页递归当前处理逻辑
+            next_page = body.find('div',class_='page').find('a', class_='next')
+            if next_page:
+                next_page_url = next_page.get('href')
+                yield Request(api_url % next_page_url, callback = self.get_articles)
 
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandArticleItem()
 
-        result['category'] = 'wenzhang'
+        result['category'] = '文章'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
+        # 车系页标签
         place = soup.find('div',class_="position").find('div',class_="pos-mark")
         if place:
             text = place.get_text().strip().replace('\n','')
             result['address'] = text
 
-        yield result
+        # 文章页标签
+        guide = soup.find('div',class_="guide").find('div',class_="crumbs")
+        if guide:
+            text = guide.get_text().strip().replace('\n','')
+            result['address'] = text
 
-
-    def get_article(self,response):
-        soup = BeautifulSoup(response.body_as_unicode())
-        result = PCautoBrandArticleItem()
-        url=response.url
-        tit=soup.find('title').get_text().strip()
-        current_path=soup.find('div',class_="current_path")
-        if current_path:
-            p_info=current_path.find('p')
-            if p_info:
-                text=p_info.get_text().strip()
-                add = text.split('：')
-                result['address'] = add[1][:-2]
-
-            p1=current_path.find('div',class_="p1")
-            if p1:
-                text = p1.get_text().strip()
-                address = text.split('：')
-                result['address'] = address[1]
-        place = soup.find('div', class_="place")
-        if place:
-            text = place.get_text().strip()
-            add = text.split(':')
-            result['address'] = add[1]
-        result['category'] = '新车频道'
-        result['tit']=tit
-        result['url']=url
         yield result
 
 
