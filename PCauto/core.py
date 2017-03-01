@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import scrapy
-import scrapy_redis
 
 from twisted.internet import reactor, defer
 from scrapy.crawler import CrawlerRunner
@@ -13,6 +11,7 @@ from spiders.PCauto_brandconfig import PCautoBrandConfigSpider
 from spiders.PCauto_brandbaojia import PCautoBrandBaojiaSpider
 from spiders.PCauto_usedcar import PCautoUsedcarSpider
 from spiders.PCauto_brandArticle import PCautoArticleSpider
+from spiders.PCauto_picture import PCautoBrandPictureSpider
 
 import pymongo
 
@@ -23,6 +22,7 @@ BrandInfoSpider = PCautoBrandinfoSpider()
 PCautoStartSpider = PCautoBrandListUrlSpider()
 UsedCarUrlSpider = PCautoUsedcarSpider()
 ArticleSpider = PCautoArticleSpider()
+PictureSpider = PCautoBrandPictureSpider()
 
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
 db = connection[settings['MONGODB_DB']]
@@ -38,7 +38,8 @@ def crawl():
     # yield runner.crawl(ConfigSpider)
     # yield runner.crawl(BaojiaUrlSpider)
     # yield runner.crawl(UsedCarUrlSpider)
-    yield runner.crawl(ArticleSpider)
+    # yield runner.crawl(ArticleSpider)
+    yield runner.crawl(PictureSpider)
     reactor.stop()
 
 

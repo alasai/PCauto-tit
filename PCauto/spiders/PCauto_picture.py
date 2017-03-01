@@ -19,19 +19,28 @@ class PCautoBrandPictureSpider(RedisSpider):
             yield Request(url, dont_filter=True, callback=self.get_types)
             yield Request(url, callback=self.get_url)
 
+
     def get_types(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        box = soup.find_all('div',class_='mainBox').find('div',class_='tbA')
-        if box:
-            types = box.find_all('div',class_='tit-a clearfix')
-            for type in types:
-                href = type.find('a').get('href')
-                yield Request(self.api_url % href, dont_filter=True, callback=self.get_page)
-                yield Request(self.api_url % href,callback=self.get_url)
-                
+        types = soup.find('div',class_='tbA').find_all('div',class_='tit-a clearfix')
+        for type in types:
+            more_info = type.find('a')
+            if more_info:
+                more_url = more_info.get('href')
+                yield Request(self.api_url % more_url, dont_filter=True, callback=self.get_page)
+                yield Request(self.api_url % more_url, callback=self.get_url)
+            else:
+                list = type.find_next_sibling('ul')
+                if list:
+                    pictures = list.find_all('li')
+                    for pic in pictures:
+                        href = pic.find('a').get('href')
+                        yield Request(self.api_url % href, callback=self.get_url)
+
+
     def get_page(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        list = soup.find_all('div',class_='mainBox').find('div',class_='tbA').find('ul',class_='ulPic ulPic-180 clearfix')
+        list = soup.find('div',class_='tbA').find('ul',class_='ulPic ulPic-180 clearfix')
         if list:
             pictures = list.find_all('li')
             for pic in pictures:

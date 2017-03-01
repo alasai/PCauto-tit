@@ -69,7 +69,8 @@ ITEM_PIPELINES = {
    # 'PCauto.pipelines.BrandConfigPipeline': 301,
    # 'PCauto.pipelines.BrandBaojiaPipeline': 302,
    # 'PCauto.pipelines.UsedCarPipeline': 303,
-   'PCauto.pipelines.ArticlePipeline': 304,
+   # 'PCauto.pipelines.ArticlePipeline': 304,
+   'PCauto.pipelines.PicUrlPipeline': 305,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
