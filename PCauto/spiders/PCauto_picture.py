@@ -19,7 +19,6 @@ class PCautoBrandPictureSpider(RedisSpider):
             yield Request(url, dont_filter=True, callback=self.get_types)
             yield Request(url, callback=self.get_url)
 
-
     def get_types(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         types = soup.find('div',class_='tbA').find_all('div',class_='tit-a clearfix')
@@ -53,10 +52,11 @@ class PCautoBrandPictureSpider(RedisSpider):
                 next_page = pages.find('a', class_='next')
                 if next_page:
                     next_page_url = next_page.get('href')
-                    yield Request(self.api_url % next_page_url, callback = self.get_page)
+                    yield Request(self.api_url % next_page_url, dont_filter=True, callback = self.get_page)
+                    yield Request(self.api_url % next_page_url, callback=self.get_url)
 
 
-    def get_url(self,response):
+    def get_url(self, response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandPictureUrlItem()
 
@@ -65,14 +65,14 @@ class PCautoBrandPictureSpider(RedisSpider):
         result['tit'] = soup.find('title').get_text().strip()
 
         # 测试图片 address 结构
-        position = soup.find('div',class_="position positionPic")
+        position = soup.find('div', class_="position positionPic")
         if position:
-            text = position.find('span',class_="mark").get_text().strip().replace('\n','').replace('\r','')
+            text = position.find('span', class_="mark").get_text().strip().replace('\n', '').replace('\r', '')
             result['address'] = text
- 
-        topBar = soup.find('div',id = 'j-topBar')
+
+        topBar = soup.find('div', id='j-topBar')
         if topBar:
-            text = topBar.find('div',class_="mark crumbs").get_text().strip().replace('\n','').replace('\r','')
+            text = topBar.find('div', class_="mark crumbs").get_text().strip().replace('\n', '').replace('\r', '')
             result['address'] = text
 
         yield result
@@ -81,7 +81,7 @@ class PCautoBrandPictureSpider(RedisSpider):
     def spider_idle(self):
         """This function is to stop the spider"""
         self.logger.info('the queue is empty, wait for one minute to close the spider')
-        time.sleep(60)
+        time.sleep(10)
         req = self.next_requests()
 
         if req:
