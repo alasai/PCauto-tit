@@ -19,22 +19,35 @@ class PCautoBrandPictureSpider(RedisSpider):
             yield Request(url, dont_filter=True, callback=self.get_types)
             yield Request(url, callback=self.get_url)
 
+
     def get_types(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        types = soup.find('div',class_='tbA').find_all('div',class_='tit-a clearfix')
+        types = soup.find('div',class_='row bdn').find('ul',class_='class-item fl clearfix').find_all('li', class_=True)
         for type in types:
-            more_info = type.find('a')
-            if more_info:
-                more_url = more_info.get('href')
-                yield Request(self.api_url % more_url, dont_filter=True, callback=self.get_page)
-                yield Request(self.api_url % more_url, callback=self.get_url)
-            else:
-                list = type.find_next_sibling('ul')
-                if list:
-                    pictures = list.find_all('li')
-                    for pic in pictures:
-                        href = pic.find('a').get('href')
-                        yield Request(self.api_url % href, callback=self.get_url)
+            dds = type.find('dl').find_all('dd')
+            for dd in dds:
+                type_url = dd.find('a').get('href')
+                yield Request(self.api_url % type_url, dont_filter=True, callback=self.get_page)
+                yield Request(self.api_url % type_url, callback=self.get_url)
+
+        chezhan = soup.find('div',class_='row bdn').find('ul',class_='class-item fl clearfix').find('li', class_=False)
+        if chezhan:
+            chezhan_url = chezhan.find('span').find('a').get('href')
+            yield Request(self.api_url % chezhan_url, callback=self.get_chezhan_list)
+
+
+    def get_chezhan_list(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        list_url = soup.find('div',class_='ft clearfix ft-fix').find('a').get('href')
+        yield Request(self.api_url % list_url, callback=self.get_chezhan_page)
+
+
+    def get_chezhan_page(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        pictures = soup.find('ul', id='JList').find_all('li')
+        for pic in pictures:
+            href = pic.find('a').get('href')
+            yield Request(self.api_url % href, callback=self.get_url)
 
 
     def get_page(self,response):
@@ -76,6 +89,24 @@ class PCautoBrandPictureSpider(RedisSpider):
             result['address'] = text
 
         yield result
+
+    # def get_types_old(self,response):
+    #     soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+    #     types = soup.find('div',class_='tbA').find_all('div',class_='tit-a clearfix')
+    #     for type in types:
+    #         more_info = type.find('a')
+    #         if more_info:
+    #             more_url = more_info.get('href')
+    #             yield Request(self.api_url % more_url, dont_filter=True, callback=self.get_page)
+    #             yield Request(self.api_url % more_url, callback=self.get_url)
+    #         else:
+    #             list = type.find_next_sibling('ul')
+    #             if list:
+    #                 pictures = list.find_all('li')
+    #                 for pic in pictures:
+    #                     href = pic.find('a').get('href')
+    #                     yield Request(self.api_url % href, callback=self.get_url)
+
 
 
     def spider_idle(self):
