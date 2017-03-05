@@ -53,3 +53,11 @@ def get_pic_url():
         if 'pic_url' in brand.keys():
             starturls.add(brand['pic_url'])
     return starturls
+
+def get_brand_youhui():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'youhui_url' in brand.keys():
+            starturls.add(brand['youhui_url'])
+    return starturls

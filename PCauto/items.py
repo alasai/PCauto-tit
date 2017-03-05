@@ -31,3 +31,6 @@ class PCautoUsedCarItem(BaseItem):
 
 class PCautoBrandArticleItem(BaseItem):
     pass
+
+class PCautoBrandYouhuiItem(BaseItem):
+    pass

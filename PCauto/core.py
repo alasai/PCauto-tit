@@ -12,6 +12,7 @@ from spiders.PCauto_brandbaojia import PCautoBrandBaojiaSpider
 from spiders.PCauto_usedcar import PCautoUsedcarSpider
 from spiders.PCauto_brandArticle import PCautoArticleSpider
 from spiders.PCauto_picture import PCautoBrandPictureSpider
+from spiders.PCauto_youhui import PCautoBrandYouhuiSpider
 
 import pymongo
 
@@ -23,6 +24,7 @@ PCautoStartSpider = PCautoBrandListUrlSpider()
 UsedCarUrlSpider = PCautoUsedcarSpider()
 ArticleSpider = PCautoArticleSpider()
 PictureSpider = PCautoBrandPictureSpider()
+BrandYouhuiSpider = PCautoBrandYouhuiSpider()
 
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
 db = connection[settings['MONGODB_DB']]
@@ -39,7 +41,8 @@ def crawl():
     # yield runner.crawl(BaojiaUrlSpider)
     # yield runner.crawl(UsedCarUrlSpider)
     # yield runner.crawl(ArticleSpider)
-    yield runner.crawl(PictureSpider)
+    # yield runner.crawl(PictureSpider)
+    yield runner.crawl(BrandYouhuiSpider)
     reactor.stop()
 
 
