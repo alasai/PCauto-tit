@@ -14,6 +14,7 @@ from spiders.PCauto_brandArticle import PCautoArticleSpider
 from spiders.PCauto_picture import PCautoBrandPictureSpider
 from spiders.PCauto_youhui import PCautoBrandYouhuiSpider
 from spiders.PCauto_comment import PCautoCommentSpider
+from spiders.PCauto_owner_price import PCautoOwnerPriceSpider
 
 import pymongo
 
@@ -27,6 +28,7 @@ ArticleSpider = PCautoArticleSpider()
 PictureSpider = PCautoBrandPictureSpider()
 BrandYouhuiSpider = PCautoBrandYouhuiSpider()
 CommentSpider = PCautoCommentSpider()
+OwnerPriceSpider = PCautoOwnerPriceSpider()
 
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
 db = connection[settings['MONGODB_DB']]
@@ -45,7 +47,8 @@ def crawl():
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(PictureSpider)
     # yield runner.crawl(BrandYouhuiSpider)
-    yield runner.crawl(CommentSpider)
+    # yield runner.crawl(CommentSpider)
+    yield runner.crawl(OwnerPriceSpider)
     reactor.stop()
 
 

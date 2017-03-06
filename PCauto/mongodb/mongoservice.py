@@ -70,3 +70,11 @@ def get_comment_url():
             starturls.add(brand['comment_url'])
     return starturls
 
+def get_owner_price():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'owner_price_url' in brand.keys():
+            starturls.add(brand['owner_price_url'])
+    return starturls
+
