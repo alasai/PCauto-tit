@@ -61,3 +61,12 @@ def get_brand_youhui():
         if 'youhui_url' in brand.keys():
             starturls.add(brand['youhui_url'])
     return starturls
+
+def get_comment_url():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'comment_url' in brand.keys():
+            starturls.add(brand['comment_url'])
+    return starturls
+

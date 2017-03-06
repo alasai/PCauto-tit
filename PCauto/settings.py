@@ -72,6 +72,7 @@ ITEM_PIPELINES = {
    # 'PCauto.pipelines.ArticlePipeline': 304,
    # 'PCauto.pipelines.PicUrlPipeline': 305,
    'PCauto.pipelines.BrandYouhuiPipeline': 306,
+   'PCauto.pipelines.CommentPipeline': 307,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

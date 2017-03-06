@@ -34,3 +34,6 @@ class PCautoBrandArticleItem(BaseItem):
 
 class PCautoBrandYouhuiItem(BaseItem):
     pass
+
+class PCautoCommentItem(BaseItem):
+    pass
