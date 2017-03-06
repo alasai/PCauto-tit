@@ -32,7 +32,7 @@ class PCautoBrandYouhuiSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandYouhuiItem()
 
-        result['category'] = 'youhui'
+        result['category'] = '优惠'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
