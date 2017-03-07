@@ -14,6 +14,14 @@ def save_brandInfo(result):
     collection = db['BrandInfo']
     collection.save(result)
 
+def save_dealer(result):
+    collection = db['Dealer']
+    collection.save(result)
+
+def save_dealer_index(result):
+    collection = db['DealerIndex']
+    collection.save(result)
+
 def get_config_url():
     collection = db['Brand']
     starturls = set()
