@@ -40,3 +40,6 @@ class PCautoCommentItem(BaseItem):
 
 class PCautoOwnerPriceItem(BaseItem):
     pass
+
+class PCautoBaoyangItem(BaseItem):
+    pass

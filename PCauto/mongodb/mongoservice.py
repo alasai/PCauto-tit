@@ -78,3 +78,10 @@ def get_owner_price():
             starturls.add(brand['owner_price_url'])
     return starturls
 
+def get_brand_baoyang():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'owner_price_url' in brand.keys():
+            starturls.add(brand['owner_price_url'])
+    return starturls
