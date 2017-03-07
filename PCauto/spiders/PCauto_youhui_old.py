@@ -9,8 +9,8 @@ from PCauto.mongodb import mongoservice
 from PCauto import pipelines
 
 
-class PCautoBrandYouhuiSpider(RedisSpider):
-    name = 'PCauto_youhui'
+class PCautoYouhuiSpider(RedisSpider):
+    name = 'PCauto_youhui_old'
     pipeline = set([pipelines.BrandYouhuiPipeline, ])
 
     def start_requests(self):

@@ -12,7 +12,6 @@ from spiders.PCauto_brandbaojia import PCautoBrandBaojiaSpider
 from spiders.PCauto_usedcar import PCautoUsedcarSpider
 from spiders.PCauto_brandArticle import PCautoArticleSpider
 from spiders.PCauto_picture import PCautoBrandPictureSpider
-from spiders.PCauto_youhui import PCautoBrandYouhuiSpider
 from spiders.PCauto_comment import PCautoCommentSpider
 from spiders.PCauto_owner_price import PCautoOwnerPriceSpider
 from spiders.PCauto_brand_baoyang import PCautoBaoyangSpider
@@ -28,7 +27,6 @@ PCautoStartSpider = PCautoBrandListUrlSpider()
 UsedCarUrlSpider = PCautoUsedcarSpider()
 ArticleSpider = PCautoArticleSpider()
 PictureSpider = PCautoBrandPictureSpider()
-BrandYouhuiSpider = PCautoBrandYouhuiSpider()
 CommentSpider = PCautoCommentSpider()
 OwnerPriceSpider = PCautoOwnerPriceSpider()
 BaoyangSpider = PCautoBaoyangSpider()
@@ -50,7 +48,6 @@ def crawl():
     # yield runner.crawl(UsedCarUrlSpider)
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(PictureSpider)
-    # yield runner.crawl(BrandYouhuiSpider)
     # yield runner.crawl(CommentSpider)
     # yield runner.crawl(OwnerPriceSpider)
     # yield runner.crawl(BaoyangSpider)
