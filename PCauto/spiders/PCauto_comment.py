@@ -42,17 +42,17 @@ class PCautoCommentSpider(RedisSpider):
 
         # save url
         result = PCautoCommentItem()
-        result['category'] = 'comment'
+        result['category'] = '车主点评'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
         position = soup.find('div',class_="position")
         if position:
-            # chexi position (class = 'position')
+            # 车系 position (class = 'position')
             place = position.find('div',class_="pos-mark")
             if place:
                 text = place.get_text().strip().replace('\n','').replace('\r','')
                 result['address'] = text
-            # chexing position (class = 'wrap position')
+            # 车型 position (class = 'wrap position')
             mark = position.find('span',class_="mark")
             if mark:
                 text = mark.get_text().strip().replace('\n','').replace('\r','')
