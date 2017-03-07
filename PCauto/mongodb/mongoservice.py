@@ -90,6 +90,14 @@ def get_brand_baoyang():
     collection = db['Brand']
     starturls = set()
     for brand in collection.find({}):
-        if 'owner_price_url' in brand.keys():
-            starturls.add(brand['owner_price_url'])
+        if 'baoyang_url' in brand.keys():
+            starturls.add(brand['baoyang_url'])
+    return starturls
+
+def get_brand_forum():
+    collection = db['Brand']
+    starturls = set()
+    for brand in collection.find({}):
+        if 'forum_url' in brand.keys():
+            starturls.add(brand['forum_url'])
     return starturls

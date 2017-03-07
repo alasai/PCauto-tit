@@ -17,6 +17,9 @@ from spiders.PCauto_owner_price import PCautoOwnerPriceSpider
 from spiders.PCauto_brand_baoyang import PCautoBaoyangSpider
 from spiders.PCauto_dealer import PCautoDealerSpider
 from spiders.PCauto_brand_youhui import PCautoBrandYouhuiSpider
+from spiders.PCauto_forum import PCautoForumSpider
+from spiders.PCauto_forum_city import PCautoCityForumSpider
+from spiders.PCauto_forum_theme import PCautoThemeForumSpider
 
 import pymongo
 
@@ -33,6 +36,9 @@ OwnerPriceSpider = PCautoOwnerPriceSpider()
 BaoyangSpider = PCautoBaoyangSpider()
 DealerSpider = PCautoDealerSpider()
 BrandYouhuiSpider = PCautoBrandYouhuiSpider()
+ForumSpider = PCautoForumSpider()
+ForumCitySpider = PCautoCityForumSpider()
+ForumThemeSpider = PCautoThemeForumSpider()
 
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
 db = connection[settings['MONGODB_DB']]
@@ -53,8 +59,11 @@ def crawl():
     # yield runner.crawl(CommentSpider)
     # yield runner.crawl(OwnerPriceSpider)
     # yield runner.crawl(BaoyangSpider)
-    yield runner.crawl(BrandYouhuiSpider)
+    # yield runner.crawl(BrandYouhuiSpider)
     # yield runner.crawl(DealerSpider)
+    # yield runner.crawl(ForumCitySpider)
+    # yield runner.crawl(ForumThemeSpider)
+    yield runner.crawl(ForumSpider)
     reactor.stop()
 
 
