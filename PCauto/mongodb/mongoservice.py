@@ -101,3 +101,11 @@ def get_brand_forum():
         if 'forum_url' in brand.keys():
             starturls.add(brand['forum_url'])
     return starturls
+
+def get_dealer_contact():
+    collection = db['Dealer']
+    starturls = set()
+    for dealer in collection.find({}):
+        if 'contact_url' in dealer.keys():
+            starturls.add(dealer['contact_url'])
+    return starturls

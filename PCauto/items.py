@@ -46,3 +46,8 @@ class PCautoBaoyangItem(BaseItem):
 
 class PCautoForumItem(BaseItem):
     pass
+
+class PCautoDealerContactItem(Item):
+    tit = Field()
+    url = Field()
+    category = Field()
