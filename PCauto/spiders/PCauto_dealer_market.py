@@ -12,7 +12,6 @@ from PCauto import pipelines
 class PCautoDealerMarketSpider(RedisSpider):
     name = 'PCauto_dealer_market'
     pipeline = set([pipelines.DealerMarketPipeline, ])
-    root_url = 'http://price.pcauto.com.cn'
 
     def start_requests(self):
         urls = mongoservice.get_dealer_market()

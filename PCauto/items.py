@@ -61,4 +61,7 @@ class PCautoDealerModelItem(SimpleItem):
 class PCautoDealerMarketItem(SimpleItem):
     pass
 
+class PCautoDealerNewsItem(SimpleItem):
+    pass
+
 
