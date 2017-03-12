@@ -117,3 +117,11 @@ def get_dealer_model():
         if 'model_url' in dealer.keys():
             starturls.add(dealer['model_url'])
     return starturls
+
+def get_dealer_market():
+    collection = db['Dealer']
+    starturls = set()
+    for dealer in collection.find({}):
+        if 'market_url' in dealer.keys():
+            starturls.add(dealer['market_url'])
+    return starturls

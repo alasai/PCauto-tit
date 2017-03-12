@@ -58,4 +58,7 @@ class PCautoDealerContactItem(SimpleItem):
 class PCautoDealerModelItem(SimpleItem):
     pass
 
+class PCautoDealerMarketItem(SimpleItem):
+    pass
+
 

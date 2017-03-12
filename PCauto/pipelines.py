@@ -167,3 +167,12 @@ class DealerModelPipeline(object):
     def process_item(self, item, spider):
         self.collection.insert(dict(item))
         return item
+
+class DealerMarketPipeline(object):
+    def __init__(self):
+        self.collection = get_mongo_collection('DealerMarket')
+
+    @check_spider_pipeline
+    def process_item(self, item, spider):
+        self.collection.insert(dict(item))
+        return item
