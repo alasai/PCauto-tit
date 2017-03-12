@@ -13,6 +13,11 @@ class BaseItem(Item):
     address = Field()
     category = Field()
 
+class SimpleItem(Item):
+    tit = Field()
+    url = Field()
+    category = Field()
+
 
 class PCautoBrandinfoItem(BaseItem):
     pass
@@ -47,7 +52,10 @@ class PCautoBaoyangItem(BaseItem):
 class PCautoForumItem(BaseItem):
     pass
 
-class PCautoDealerContactItem(Item):
-    tit = Field()
-    url = Field()
-    category = Field()
+class PCautoDealerContactItem(SimpleItem):
+    pass
+
+class PCautoDealerModelItem(SimpleItem):
+    pass
+
+

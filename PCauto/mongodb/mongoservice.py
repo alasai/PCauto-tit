@@ -109,3 +109,11 @@ def get_dealer_contact():
         if 'contact_url' in dealer.keys():
             starturls.add(dealer['contact_url'])
     return starturls
+
+def get_dealer_model():
+    collection = db['Dealer']
+    starturls = set()
+    for dealer in collection.find({}):
+        if 'model_url' in dealer.keys():
+            starturls.add(dealer['model_url'])
+    return starturls

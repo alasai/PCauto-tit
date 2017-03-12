@@ -4,7 +4,6 @@ from scrapy_redis.spiders import RedisSpider
 from scrapy.http import Request
 from bs4 import BeautifulSoup
 import time
-import re
 from PCauto.items import PCautoDealerContactItem
 from PCauto.mongodb import mongoservice
 from PCauto import pipelines

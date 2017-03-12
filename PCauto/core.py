@@ -21,6 +21,7 @@ from spiders.PCauto_forum import PCautoForumSpider
 from spiders.PCauto_forum_city import PCautoCityForumSpider
 from spiders.PCauto_forum_theme import PCautoThemeForumSpider
 from spiders.PCauto_dealer_contact import PCautoDealerContactSpider
+from spiders.PCauto_dealer_model import PCautoDealerModelSpider
 
 import pymongo
 
@@ -37,6 +38,7 @@ OwnerPriceSpider = PCautoOwnerPriceSpider()
 BaoyangSpider = PCautoBaoyangSpider()
 DealerSpider = PCautoDealerSpider()
 DealerContactSpider = PCautoDealerContactSpider()
+DealerModelSpider = PCautoDealerModelSpider()
 BrandYouhuiSpider = PCautoBrandYouhuiSpider()
 ForumSpider = PCautoForumSpider()
 ForumCitySpider = PCautoCityForumSpider()
@@ -63,7 +65,8 @@ def crawl():
     # yield runner.crawl(BaoyangSpider)
     # yield runner.crawl(BrandYouhuiSpider)
     # yield runner.crawl(DealerSpider)
-    yield runner.crawl(DealerContactSpider)
+    # yield runner.crawl(DealerContactSpider)
+    yield runner.crawl(DealerModelSpider)
     # yield runner.crawl(ForumCitySpider)
     # yield runner.crawl(ForumThemeSpider)
     # yield runner.crawl(ForumSpider)
