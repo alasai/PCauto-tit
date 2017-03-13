@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -55,7 +55,10 @@ DOWNLOAD_DELAY = 1
 #DOWNLOADER_MIDDLEWARES = {
 #    'PCauto.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
-
+DOWNLOADER_MIDDLEWARES = {
+     'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
+     'PCauto.middlewares.RotateUserAgentMiddleware' :543
+}
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -65,12 +68,12 @@ DOWNLOAD_DELAY = 1
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   # 'PCauto.pipelines.BrandInfoPipeline': 300,
-   # 'PCauto.pipelines.BrandConfigPipeline': 301,
-   # 'PCauto.pipelines.BrandBaojiaPipeline': 302,
-   # 'PCauto.pipelines.UsedCarPipeline': 303,
-   # 'PCauto.pipelines.ArticlePipeline': 304,
-   # 'PCauto.pipelines.PicUrlPipeline': 305,
+   'PCauto.pipelines.BrandInfoPipeline': 300,
+   'PCauto.pipelines.BrandConfigPipeline': 301,
+   'PCauto.pipelines.BrandBaojiaPipeline': 302,
+   'PCauto.pipelines.UsedCarPipeline': 303,
+   'PCauto.pipelines.ArticlePipeline': 304,
+   'PCauto.pipelines.PicUrlPipeline': 305,
    'PCauto.pipelines.BrandYouhuiPipeline': 306,
    'PCauto.pipelines.CommentPipeline': 307,
    'PCauto.pipelines.OwnerPricePipeline': 308,

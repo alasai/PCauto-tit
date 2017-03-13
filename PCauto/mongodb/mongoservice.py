@@ -123,13 +123,5 @@ def get_dealer_market():
     starturls = set()
     for dealer in collection.find({}):
         if 'market_url' in dealer.keys():
-            starturls.add(dealer['market_url'])
-    return starturls
-
-def get_dealer_news():
-    collection = db['Dealer']
-    starturls = set()
-    for dealer in collection.find({}):
-        if 'news_url' in dealer.keys():
-            starturls.add(dealer['news_url'])
+            starturls.add(dealer['model_url'])
     return starturls
