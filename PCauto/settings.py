@@ -83,6 +83,8 @@ ITEM_PIPELINES = {
    'PCauto.pipelines.DealerModelPipeline': 312,
    'PCauto.pipelines.DealerMarketPipeline': 313,
    'PCauto.pipelines.DealerNewsPipeline': 314,
+   'PCauto.pipelines.MallGCTPipeline': 315,
+   'PCauto.pipelines.MallImportPipeline': 316,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
