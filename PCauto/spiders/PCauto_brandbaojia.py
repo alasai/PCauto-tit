@@ -4,6 +4,7 @@ from scrapy_redis.spiders import RedisSpider
 from scrapy.http import Request
 from bs4 import BeautifulSoup
 import time
+import json
 from PCauto.mongodb import mongoservice
 from PCauto.items import PCautoBrandbaojiaUrlItem
 from PCauto import pipelines
@@ -18,33 +19,72 @@ class PCautoBrandBaojiaSpider(RedisSpider):
             yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
             yield Request(url, callback=self.get_url)
 
-
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         vehicleList = soup.find('div',id="typeList")
         if vehicleList:
-            saleTypes = vehicleList.find_all('div',class_='contentdiv')
-            for type in saleTypes:
-                vehicles = type.find('ul').find_all('li')
-                for vehicle in vehicles:
-                    href = vehicle.find('a').get('href')
-                    yield Request(href, callback=self.get_url)
+            vehicles = vehicleList.find('div',class_='contentdiv').find('ul').find_all('li')
+            for vehicle in vehicles:
+                href = vehicle.find('a').get('href')
+                yield Request(href, callback=self.save_vehicleType)
+
+    def save_vehicleType(self,response):
+        # start save vehicleType index
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+
+        result = dict()
+        result['category'] = '车型首页'
+        result['url'] = response.url
+        result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div', class_="position").find('div', class_="pos-mark")
+        if place:
+            text = place.get_text().strip().replace('\n', '').replace('\r','')
+            result['address'] = text
+
+        put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True,
+                                encoding='utf8').encode('utf8')
+        save_result = json.loads(put_result)
+        mongoservice.save_vehicleType(save_result)
+
+        # request for vehicleType_baojia
+        yield Request(response.url + 'price.html', callback=self.get_url)
+
+        # vehicleList = soup.find('div',id="typeList")
+        # if vehicleList:
+        #     saleTypes = vehicleList.find_all('div',class_='contentdiv')
+        #     for type in saleTypes:
+        #         vehicles = type.find('ul').find_all('li')
+        #         for vehicle in vehicles:
+        #             href = vehicle.find('a').get('href')
+        #             yield Request(href, callback=self.get_url)
 
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandbaojiaUrlItem()
-
         result['category'] = '报价'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
-
-        place = soup.find('div',class_="position")
-        if place:
-            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
-            result['address'] = text
-
+        position = soup.find('div',class_="position")
+        if position:
+            # 车系 position (class = 'position')
+            place = position.find('div',class_="pos-mark")
+            if place:
+                text = place.get_text().strip().replace('\n','').replace('\r','')
+                result['address'] = text
+            # 车型 position (class = 'wrap position')
+            mark = position.find('span',class_="mark")
+            if mark:
+                text = mark.get_text().strip().replace('\n','').replace('\r','')
+                result['address'] = text
         yield result
+
+        # place = soup.find('div',class_="position")
+        # if place:
+        #     text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
+        #     result['address'] = text
+
 
 
     def spider_idle(self):

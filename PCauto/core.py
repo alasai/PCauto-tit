@@ -64,7 +64,7 @@ def crawl():
     # yield runner.crawl(PCautoStartSpider)
     # yield runner.crawl(BrandInfoSpider)
     # yield runner.crawl(ConfigSpider)
-    # yield runner.crawl(BaojiaUrlSpider)
+    yield runner.crawl(BaojiaUrlSpider)
     # yield runner.crawl(UsedCarUrlSpider)
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(PictureSpider)
@@ -81,7 +81,7 @@ def crawl():
     # yield runner.crawl(ForumThemeSpider)
     # yield runner.crawl(ForumSpider)
     # yield runner.crawl(MallGCTSpider)
-    yield runner.crawl(MallImportSpider)
+    # yield runner.crawl(MallImportSpider)
 
     reactor.stop()
 

@@ -14,6 +14,10 @@ def save_brandInfo(result):
     collection = db['BrandInfo']
     collection.save(result)
 
+def save_vehicleType(result):
+    collection = db['VehicleType']
+    collection.save(result)
+
 def save_dealer(result):
     collection = db['Dealer']
     collection.save(result)
