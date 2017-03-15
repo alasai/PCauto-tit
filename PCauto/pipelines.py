@@ -69,7 +69,7 @@ class PicUrlPipeline(object):
 
 class BrandConfigPipeline(object):
     def __init__(self):
-        self.collection = get_mongo_collection('BrandConfig')
+        self.collection = get_mongo_collection('Config')
 
     @check_spider_pipeline
     def process_item(self, item, spider):

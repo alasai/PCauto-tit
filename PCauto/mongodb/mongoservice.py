@@ -4,8 +4,6 @@ from scrapy.conf import settings
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
 db = connection[settings['MONGODB_DB']]
 
-
-
 def save_brandlist(result):
     collection = db['Brand']
     collection.save(result)
@@ -127,5 +125,13 @@ def get_dealer_market():
     starturls = set()
     for dealer in collection.find({}):
         if 'market_url' in dealer.keys():
-            starturls.add(dealer['model_url'])
+            starturls.add(dealer['market_url'])
     return starturls
+
+def get_vehicleType():
+    collection = db['VehicleType']
+    starturls = set()
+    for doc in collection.find({'url':{'$exists':True}},{'url':1,'_id':0}):
+        starturls.add(doc['url'])
+    return starturls
+

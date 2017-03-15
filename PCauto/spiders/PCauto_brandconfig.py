@@ -17,21 +17,28 @@ class PCautoBrandConfigSpider(RedisSpider):
         config_urls = mongoservice.get_config_url()
         for url in config_urls:
             yield Request(url, callback=self.get_url)
-
+        vehicleType_urls = mongoservice.get_vehicleType()
+        for url in vehicleType_urls:
+            yield Request(url + 'config.html', callback=self.get_url)
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoBrandConfigItem()
-
-        result['category'] = '车系-参数配置'
+        result['category'] = '参数配置'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
-
-        place = soup.find('div',class_="position")
-        if place:
-            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
-            result['address'] = text
-
+        position = soup.find('div',class_="position")
+        if position:
+            # 车系 position (class = 'position')
+            place = position.find('div',class_="pos-mark")
+            if place:
+                text = place.get_text().strip().replace('\n','').replace('\r','')
+                result['address'] = text
+            # 车型 position (class = 'wrap position')
+            mark = position.find('span',class_="mark")
+            if mark:
+                text = mark.get_text().strip().replace('\n','').replace('\r','')
+                result['address'] = text
         yield result
 
 
