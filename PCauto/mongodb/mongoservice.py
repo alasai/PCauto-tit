@@ -104,6 +104,14 @@ def get_brand_forum():
             starturls.add(brand['forum_url'])
     return starturls
 
+def get_fenqi_url():
+    collection = db['Brand']
+    starturls = set()
+    for doc in collection.find({'fenqi_url':{'$exists':True}},{'fenqi_url':1,'_id':0}):
+        starturls.add(doc['fenqi_url'])
+    return starturls
+
+
 def get_dealer_contact():
     collection = db['Dealer']
     starturls = set()

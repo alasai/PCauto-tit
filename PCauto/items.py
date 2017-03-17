@@ -52,6 +52,10 @@ class PCautoBaoyangItem(BaseItem):
 class PCautoForumItem(BaseItem):
     pass
 
+class PCautoChedaiItem(BaseItem):
+    pass
+
+
 
 
 class PCautoDealerContactItem(SimpleItem):
