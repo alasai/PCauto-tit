@@ -54,19 +54,6 @@ class PCautoChedaiSpider(RedisSpider):
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
-        position = soup.find('div',class_="position")
-        if position:
-            # 车系 position (class = 'position')
-            place = position.find('div',class_="pos-mark")
-            if place:
-                text = place.get_text().strip().replace('\n','').replace('\r','')
-                result['address'] = text
-            # 车型 position (class = 'wrap position')
-            mark = position.find('span',class_="mark")
-            if mark:
-                text = mark.get_text().strip().replace('\n','').replace('\r','')
-                result['address'] = text
-
         yield result
 
 

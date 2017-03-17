@@ -52,8 +52,6 @@ class PCautoBaoyangItem(BaseItem):
 class PCautoForumItem(BaseItem):
     pass
 
-class PCautoChedaiItem(BaseItem):
-    pass
 
 
 
@@ -74,4 +72,7 @@ class PCautoMallGCTItem(SimpleItem):
     pass
 
 class PCautoMallImportItem(SimpleItem):
+    pass
+
+class PCautoChedaiItem(SimpleItem):
     pass
