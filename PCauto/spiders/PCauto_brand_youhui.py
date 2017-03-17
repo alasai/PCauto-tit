@@ -5,14 +5,14 @@ from scrapy.http import Request
 from bs4 import BeautifulSoup
 import time
 import re
-from PCauto.items import PCautoBrandYouhuiItem
+from PCauto.items import PCautoYouhuiItem
 from PCauto.mongodb import mongoservice
 from PCauto import pipelines
 
 
 class PCautoBrandYouhuiSpider(RedisSpider):
     name = 'PCauto_brand_youhui'
-    pipeline = set([pipelines.BrandYouhuiPipeline, ])
+    pipeline = set([pipelines.YouhuiPipeline, ])
 
     def start_requests(self):
         youhui_urls = mongoservice.get_brand_youhui()
@@ -21,7 +21,7 @@ class PCautoBrandYouhuiSpider(RedisSpider):
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        result = PCautoBrandYouhuiItem()
+        result = PCautoYouhuiItem()
 
         result['category'] = '车系-优惠'
         result['tit'] = soup.find('title').get_text().strip()

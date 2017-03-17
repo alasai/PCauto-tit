@@ -74,7 +74,7 @@ ITEM_PIPELINES = {
    'PCauto.pipelines.UsedCarPipeline': 303,
    'PCauto.pipelines.ArticlePipeline': 304,
    'PCauto.pipelines.PicUrlPipeline': 305,
-   'PCauto.pipelines.BrandYouhuiPipeline': 306,
+   'PCauto.pipelines.YouhuiPipeline': 306,
    'PCauto.pipelines.CommentPipeline': 307,
    'PCauto.pipelines.OwnerPricePipeline': 308,
    'PCauto.pipelines.BaoyangPipeline': 309,

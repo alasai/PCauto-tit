@@ -16,7 +16,7 @@ from spiders.PCauto_comment import PCautoCommentSpider
 from spiders.PCauto_owner_price import PCautoOwnerPriceSpider
 from spiders.PCauto_brand_baoyang import PCautoBaoyangSpider
 from spiders.PCauto_dealer import PCautoDealerSpider
-from spiders.PCauto_brand_youhui import PCautoBrandYouhuiSpider
+from spiders.PCauto_youhui import PCautoYouhuiSpider
 from spiders.PCauto_forum import PCautoForumSpider
 from spiders.PCauto_forum_city import PCautoCityForumSpider
 from spiders.PCauto_forum_theme import PCautoThemeForumSpider
@@ -45,7 +45,7 @@ DealerContactSpider = PCautoDealerContactSpider()
 DealerModelSpider = PCautoDealerModelSpider()
 DealerMarketSpider = PCautoDealerMarketSpider()
 DealerNewsSpider = PCautoDealerNewsSpider()
-BrandYouhuiSpider = PCautoBrandYouhuiSpider()
+BrandYouhuiSpider = PCautoYouhuiSpider()
 ForumSpider = PCautoForumSpider()
 ForumCitySpider = PCautoCityForumSpider()
 ForumThemeSpider = PCautoThemeForumSpider()
@@ -68,10 +68,10 @@ def crawl():
     # yield runner.crawl(UsedCarUrlSpider)
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(PictureSpider)
-    yield runner.crawl(CommentSpider)
-    yield runner.crawl(OwnerPriceSpider)
+    # yield runner.crawl(CommentSpider)
+    # yield runner.crawl(OwnerPriceSpider)
     # yield runner.crawl(BaoyangSpider)
-    # yield runner.crawl(BrandYouhuiSpider)
+    yield runner.crawl(BrandYouhuiSpider)
     # yield runner.crawl(DealerSpider)
     # yield runner.crawl(DealerContactSpider)
     # yield runner.crawl(DealerModelSpider)

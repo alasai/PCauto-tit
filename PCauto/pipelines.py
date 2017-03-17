@@ -85,9 +85,9 @@ class BrandBaojiaPipeline(object):
         self.collection.insert(dict(item))
         return item
 
-class BrandYouhuiPipeline(object):
+class YouhuiPipeline(object):
     def __init__(self):
-        self.collection = get_mongo_collection('BrandYouhui')
+        self.collection = get_mongo_collection('Youhui')
 
     @check_spider_pipeline
     def process_item(self, item, spider):
