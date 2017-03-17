@@ -55,6 +55,9 @@ class PCautoForumItem(BaseItem):
 class PCautoDealerItem(BaseItem):
     pass
 
+class PCautoVideoItem(BaseItem):
+    pass
+
 
 
 

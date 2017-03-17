@@ -27,6 +27,7 @@ from spiders.PCauto_dealer_news import PCautoDealerNewsSpider
 from spiders.PCauto_mall_gct import PCautoMallGCTSpider
 from spiders.PCauto_mall_import import PCautoMallImportSpider
 from spiders.PCauto_chedai import PCautoChedaiSpider
+from spiders.PCauto_video import PCautoVideoSpider
 
 import pymongo
 
@@ -53,6 +54,7 @@ ForumCitySpider = PCautoCityForumSpider()
 ForumThemeSpider = PCautoThemeForumSpider()
 MallGCTSpider = PCautoMallGCTSpider()
 MallImportSpider = PCautoMallImportSpider()
+VideoSpider = PCautoVideoSpider()
 
 
 connection = pymongo.MongoClient(settings['MONGODB_SERVER'], settings['MONGODB_PORT'])
@@ -76,7 +78,7 @@ def crawl():
     # yield runner.crawl(BaoyangSpider)
     # yield runner.crawl(BrandYouhuiSpider)
     # yield runner.crawl(ChedaiSpider)
-    yield runner.crawl(DealerSpider)
+    # yield runner.crawl(DealerSpider)
     # yield runner.crawl(DealerContactSpider)
     # yield runner.crawl(DealerModelSpider)
     # yield runner.crawl(DealerMarketSpider)
@@ -86,6 +88,7 @@ def crawl():
     # yield runner.crawl(ForumSpider)
     # yield runner.crawl(MallGCTSpider)
     # yield runner.crawl(MallImportSpider)
+    yield runner.crawl(VideoSpider)
 
     reactor.stop()
 
