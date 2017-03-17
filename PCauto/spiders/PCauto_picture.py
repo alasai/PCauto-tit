@@ -16,13 +16,61 @@ class PCautoBrandPictureSpider(RedisSpider):
     def start_requests(self):
         pic_urls = mongoservice.get_pic_url()
         for url in pic_urls:
-            yield Request(url, dont_filter=True, callback=self.get_types)
+            yield Request(url, dont_filter=True, callback=self.get_year)
             yield Request(url, callback=self.get_url)
+
+
+    def get_year(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        # 年款
+        labels = soup.find('div', class_='row j-box-open').find_all('span', class_='ul-label')
+        for label in labels:
+            href = label.find('a').get('href')
+            yield Request(self.api_url % href, callback=self.get_url)
+        # 在售车型
+        boxes = soup.find('div', class_='row j-box-open').find_all('div', class_='ul-box')
+        for box in boxes:
+            vehicles = box.find_all('li')
+            for vehicle in vehicles:
+                href = vehicle.find('a').get('href')
+                yield Request(self.api_url % href, dont_filter=True, callback=self.get_types)
+                yield Request(self.api_url % href, callback=self.get_url)
+        # 停售车型
+        vehicle_discontinued = soup.find('div', class_='row j-box-open').find('div', class_='subMark flex-btn').find('a')
+        if vehicle_discontinued:
+            url = vehicle_discontinued.get('href')
+            yield Request(self.api_url % url, dont_filter=True, callback=self.get_vehicle_discontinued)
+            yield Request(self.api_url % url, callback=self.get_url)
+        # 图解 组图 车展
+        types = soup.find('div', class_='row bdn').find_all('li', class_=False)
+        for  idx,val in enumerate(types):
+            type_url = val.find('a').get('href')
+            yield Request(self.api_url % type_url, callback=self.get_url)
+            # 对车展做进一步挖掘
+            if idx == types.__len__() - 1:
+                yield Request(self.api_url % type_url, callback=self.get_items)
+
+
+    def get_vehicle_discontinued(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        # 年款
+        labels = soup.find('div', class_='row j-box-open').find_all('span', class_='ul-label')
+        for label in labels:
+            href = label.find('a').get('href')
+            yield Request(self.api_url % href, callback=self.get_url)
+        # 在售车型
+        boxes = soup.find('div', class_='row j-box-open').find_all('div', class_='ul-box')
+        for box in boxes:
+            vehicles = box.find_all('li')
+            for vehicle in vehicles:
+                href = vehicle.find('a').get('href')
+                yield Request(self.api_url % href, dont_filter=True, callback=self.get_types)
+                yield Request(self.api_url % href, callback=self.get_url)
 
 
     def get_types(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        types = soup.find('div',class_='row bdn').find('ul',class_='class-item fl clearfix').find_all('li', class_=True)
+        types = soup.find('div',class_='row bdn').find_all('li', class_=True)
         for type in types:
             dds = type.find('dl').find_all('dd')
             for dd in dds:
@@ -30,24 +78,36 @@ class PCautoBrandPictureSpider(RedisSpider):
                 yield Request(self.api_url % type_url, dont_filter=True, callback=self.get_page)
                 yield Request(self.api_url % type_url, callback=self.get_url)
 
-        chezhan = soup.find('div',class_='row bdn').find('ul',class_='class-item fl clearfix').find('li', class_=False)
-        if chezhan:
-            chezhan_url = chezhan.find('span').find('a').get('href')
-            yield Request(self.api_url % chezhan_url, callback=self.get_chezhan_list)
+
+    def get_items(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        items = soup.find('div', class_='bd bdn').find('dd', class_='item-a clearfix').find_all('a')
+        for item in items[-5:]:
+            href = item.get('href')
+            yield Request(self.api_url % href, callback=self.get_item_list)
 
 
-    def get_chezhan_list(self,response):
+    def get_item_list(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         list_url = soup.find('div',class_='ft clearfix ft-fix').find('a').get('href')
-        yield Request(self.api_url % list_url, callback=self.get_chezhan_page)
+        yield Request(self.api_url % list_url, callback=self.get_item_page)
 
 
-    def get_chezhan_page(self,response):
+    def get_item_page(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         pictures = soup.find('ul', id='JList').find_all('li')
         for pic in pictures:
             href = pic.find('a').get('href')
             yield Request(self.api_url % href, callback=self.get_url)
+
+        # 下一页递归当前处理逻辑
+        pages = soup.find('div', class_='pcauto_page')
+        if pages:
+            next_page = pages.find('a', class_='next')
+            if next_page:
+                next_page_url = '/' + next_page.get('href')
+                yield Request(self.api_url % next_page_url, dont_filter=True, callback=self.get_item_page)
+                yield Request(self.api_url % next_page_url, callback=self.get_url)
 
 
     def get_page(self,response):
