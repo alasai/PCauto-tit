@@ -7,12 +7,15 @@ import time
 import json
 import re
 from PCauto.mongodb import mongoservice
-
+from PCauto import pipelines
+from PCauto.items import PCautoDealerItem
 
 class PCautoDealerSpider(RedisSpider):
     name = 'PCauto_dealer'
     index_page = 'http://price.pcauto.com.cn/shangjia/'
     root = 'http://price.pcauto.com.cn%s'
+
+    pipeline = set([pipelines.DealerPipeline, ])
 
 
     def start_requests(self):
@@ -26,7 +29,18 @@ class PCautoDealerSpider(RedisSpider):
             brands = tab.find_all('a')
             for brand in brands:
                 href = brand.get('href')
-                yield Request(href, callback=self.get_page)
+                yield Request(href, dont_filter=True, callback=self.get_city)
+                yield Request(href, callback=self.get_url)
+
+
+    def get_city(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(),'lxml')
+        citys = soup.find('div',class_="piList").find_all('span')
+        for city in citys:
+            href = city.find('a').get('href')
+            if href != 'javascript:void(0)':
+                yield Request(href, dont_filter=True, callback=self.get_page)
+                yield Request(href, callback=self.get_url)
 
 
     def get_page(self,response):
@@ -37,7 +51,8 @@ class PCautoDealerSpider(RedisSpider):
             dealers = list_body.find('ul').find_all('li')
             for dealer in dealers:
                 href = dealer.find('div',class_='divYSd').find('a').get('href')
-                yield Request(href, callback=self.get_dealer)
+                yield Request(href, dont_filter=True, callback=self.get_dealer)
+                yield Request(href, callback=self.get_url)
 
             # get next page
             page_info = list_body.find('div',class_='pcauto_page')
@@ -45,7 +60,8 @@ class PCautoDealerSpider(RedisSpider):
                 next_page = page_info.find('a',class_='next')
                 if next_page:
                     next_page_url = next_page.get('href')
-                    yield Request(self.root % next_page_url, callback=self.get_page)
+                    yield Request(self.root % next_page_url, dont_filter=True, callback=self.get_page)
+                    yield Request(self.root % next_page_url, callback=self.get_url)
 
 
     def get_dealer(self,response):
@@ -86,6 +102,20 @@ class PCautoDealerSpider(RedisSpider):
             save_result = json.loads(put_result)
             mongoservice.save_dealer(save_result)
 
+    def get_url(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        result = PCautoDealerItem()
+
+        result['category'] = '车系-经销商'
+        result['url'] = response.url
+        result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div',class_="position")
+        if place:
+            text = place.find('span',class_="mark").get_text().strip().replace('\n','').replace('\r','')
+            result['address'] = text
+
+        yield result
 
     def spider_idle(self):
         """This function is to stop the spider"""
