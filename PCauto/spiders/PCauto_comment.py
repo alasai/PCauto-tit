@@ -33,7 +33,7 @@ class PCautoCommentSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
 
         # find next page
-        nav = soup.find('div',class_='main_nav_page')
+        nav = soup.find('div',class_='pcauto_page')
         if nav:
             next_page = nav.find('a',class_='next')
             if next_page:

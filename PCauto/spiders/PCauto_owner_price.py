@@ -21,12 +21,10 @@ class PCautoOwnerPriceSpider(RedisSpider):
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        vehicleList = soup.find('div',class_="box-bd box-bd-0")
-        if vehicleList:
-            vehicles = vehicleList.find_all('div',class_='tr')
-            for vehicle in vehicles:
-                href = vehicle.find('span',class_='td1').find('a').get('href')
-                yield Request(href, callback=self.get_url)
+        vehicles = soup.find_all('div',class_='tr')
+        for vehicle in vehicles:
+            href = vehicle.find('span',class_='td1').find('a').get('href')
+            yield Request(href, callback=self.get_url)
 
 
     def get_url(self,response):
