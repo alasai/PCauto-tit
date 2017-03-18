@@ -58,6 +58,9 @@ class PCautoDealerItem(BaseItem):
 class PCautoVideoItem(BaseItem):
     pass
 
+class PCautoHangqingItem(BaseItem):
+    pass
+
 
 
 
