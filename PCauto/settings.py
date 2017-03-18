@@ -90,6 +90,7 @@ ITEM_PIPELINES = {
    'PCauto.pipelines.VideoPipeline': 319,
    'PCauto.pipelines.HangqingPipeline': 320,
    'PCauto.pipelines.NewCarPipeline': 321,
+   'PCauto.pipelines.DaogouPipeline': 322,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
