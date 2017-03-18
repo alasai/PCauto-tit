@@ -61,6 +61,9 @@ class PCautoVideoItem(BaseItem):
 class PCautoHangqingItem(BaseItem):
     pass
 
+class PCautoNewCarItem(BaseItem):
+    pass
+
 
 
 
