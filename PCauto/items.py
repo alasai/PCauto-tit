@@ -85,6 +85,9 @@ class PCautoMachineOilItem(BaseItem):
 class PCautoGaizhuangItem(BaseItem):
     pass
 
+class PCautoHangyeItem(BaseItem):
+    pass
+
 
 
 
