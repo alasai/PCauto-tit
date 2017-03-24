@@ -7,18 +7,31 @@ import time
 import re
 from PCauto.items import PCautoVideoItem
 from PCauto import pipelines
+import requests
 
-
-class PCautoVideoSpider(RedisSpider):
-    name = 'PCauto_video'
+class PCautoVideoBrandSpider(RedisSpider):
+    name = 'PCauto_video_brand'
     root = 'http://price.pcauto.com.cn%s'
     bid_url = 'http://price.pcauto.com.cn/index/js/5_5/treedata-vn-html.js'
     sid_url = 'http://price.pcauto.com.cn/index/js/5_5/treedata-vn-%s.js'
+    test_url = 'http://price.pcauto.com.cn/index/js/5_5/treedata-vn-62.js'
 
-    pipeline = set([pipelines.VideoPipeline, ])
+    pipeline = set([pipelines.VideoBrandPipeline, ])
 
     def start_requests(self):
-        yield Request(self.bid_url,callback=self.get_brand)
+        # yield Request(self.test_url, headers={
+        #     'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'
+        # }, callback=self.do_test)
+        yield Request(self.bid_url, callback=self.get_brand)
+
+    def do_test(self,response):
+        body = response._body
+        ma = re.search(r'brandList_\d*=\'(.+)\';', body)
+        if not ma:
+            print response.url + ' : ' + response.request.headers['User-Agent']
+        car_page_str = ma.group(1)
+        print car_page_str
+
 
     def get_brand(self,response):
         body = response._body
@@ -29,6 +42,10 @@ class PCautoVideoSpider(RedisSpider):
     def get_car(self,response):
         body = response._body
         ma = re.search(r'brandList_\d*=\'(.+)\';', body)
+        if not ma:
+            print response.url + ' : ' + response.request.headers['User-Agent']
+            r = requests.get(response.url)
+            ma = re.search(r'brandList_\d*=\'(.+)\';', r.text)
         car_page_str = ma.group(1)
         soup = BeautifulSoup(car_page_str,'lxml')
         cars = soup.find_all('li',id=True)
