@@ -76,6 +76,9 @@ class PCautoTechItem(BaseItem):
 class PCautoYanghuItem(BaseItem):
     pass
 
+class PCautoTireItem(BaseItem):
+    pass
+
 
 
 
