@@ -2,17 +2,16 @@
 
 from scrapy_redis.spiders import RedisSpider
 from scrapy.http import Request
-from bs4 import BeautifulSoup
 from lxml import etree
 import time
 from PCauto import pipelines
-from PCauto.items import PCautoMachineOilItem
+from PCauto.items import PCautoGaizhuangItem
 
-class PCautoMachineOilSpider(RedisSpider):
-    name = 'PCauto_machineoil'
-    index_page = 'http://www.pcauto.com.cn/drivers/machineoil/'
+class PCautoGaizhuangSpider(RedisSpider):
+    name = 'PCauto_gaizhuang'
+    index_page = 'http://www.pcauto.com.cn/tuning/'
 
-    pipeline = set([pipelines.MachineOilPipeline, ])
+    pipeline = set([pipelines.GaizhuangPipeline, ])
 
     def start_requests(self):
         yield Request(self.index_page, callback=self.get_nav)
@@ -43,47 +42,40 @@ class PCautoMachineOilSpider(RedisSpider):
 
 
     def get_url(self,response):
-        # soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         model = etree.HTML(response.body_as_unicode())
-        result = PCautoMachineOilItem()
+        result = PCautoGaizhuangItem()
 
-        result['category'] = '机油'
+        result['category'] = '改装'
         result['url'] = response.url
-        # result['tit'] = soup.find('title').get_text().strip()
         result['tit'] = model.xpath('//title')[0].text.strip()
 
-        # place = soup.find('div',class_="guide")
         place = model.xpath('//div[@class="guide"]')
         # nav and aiticle
         if place:
-            # mark = place.find('span',class_="mark")
             mark = place[0].xpath('./span[@class="mark"]')
             if mark:
-                # text = mark.get_text().strip().replace('\n','').replace('\r','')
-                # text = mark[0].text.strip().replace('\n','').replace('\r','')  # false
                 text = mark[0].xpath('string()')
                 result['address'] = text
-            # crumbs = place.find('div', class_='crumbs')
             crumbs = place[0].xpath('./div[@class="crumbs"]')
             if crumbs:
-                # text = crumbs.get_text().strip().replace('\n', '').replace('\r', '')
-                # text = crumbs[0].text.strip().replace('\n', '').replace('\r', '') # false
                 text = crumbs[0].xpath('string()')
                 result['address'] = text
         # video(none)
-        # breadcrumb = soup.find('div', class_='breadcrumb')
         breadcrumb = model.xpath('//div[@class="breadcrumb"]')
         if breadcrumb:
-            # text = breadcrumb.get_text().strip().replace('\n','').replace('\r','')
-            # text = breadcrumb[0].text.strip().replace('\n','').replace('\r','') # false
             text = breadcrumb[0].xpath('string()')
+            result['address'] = text
+        # forum
+        com_crumb = model.xpath('//div[@class="com-crumb"]')
+        if com_crumb:
+            text = com_crumb[0].xpath('string()')
             result['address'] = text
 
         yield result
 
     def spider_idle(self):
         """This function is to stop the spider"""
-        self.logger.info('the queue is empty, wait for one minute to close the spider')
+        self.logger.info('the queue is empty, wait for half minute to close the spider')
         time.sleep(30)
         req = self.next_requests()
 
