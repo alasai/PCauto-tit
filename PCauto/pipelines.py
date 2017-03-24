@@ -278,7 +278,16 @@ class PingcePipeline(object):
 
 class TechPipeline(object):
     def __init__(self):
-        self.collection = get_mongo_collection('Pingce')
+        self.collection = get_mongo_collection('Tech')
+
+    @check_spider_pipeline
+    def process_item(self, item, spider):
+        self.collection.insert(dict(item))
+        return item
+
+class YanghuPipeline(object):
+    def __init__(self):
+        self.collection = get_mongo_collection('Yanghu')
 
     @check_spider_pipeline
     def process_item(self, item, spider):

@@ -73,6 +73,9 @@ class PCautoPingceItem(BaseItem):
 class PCautoTechItem(BaseItem):
     pass
 
+class PCautoYanghuItem(BaseItem):
+    pass
+
 
 
 
