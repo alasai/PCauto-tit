@@ -70,6 +70,9 @@ class PCautoDaogouItem(BaseItem):
 class PCautoPingceItem(BaseItem):
     pass
 
+class PCautoTechItem(BaseItem):
+    pass
+
 
 
 
