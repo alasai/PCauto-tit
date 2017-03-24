@@ -50,6 +50,7 @@ class PCautoYanghuSpider(RedisSpider):
         result['tit'] = soup.find('title').get_text().strip()
 
         place = soup.find('div',class_="guide")
+        # nav and aiticle
         if place:
             mark = place.find('span',class_="mark")
             if mark:
@@ -59,6 +60,11 @@ class PCautoYanghuSpider(RedisSpider):
             if crumbs:
                 text = crumbs.get_text().strip().replace('\n', '').replace('\r', '')
                 result['address'] = text
+        # video
+        breadcrumb = soup.find('div', class_='breadcrumb')
+        if breadcrumb:
+            text = breadcrumb.get_text().strip().replace('\n','').replace('\r','')
+            result['address'] = text
 
         yield result
 
