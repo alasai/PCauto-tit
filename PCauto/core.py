@@ -28,9 +28,11 @@ from spiders.PCauto_mall_gct import PCautoMallGCTSpider
 from spiders.PCauto_mall_import import PCautoMallImportSpider
 from spiders.PCauto_chedai import PCautoChedaiSpider
 from spiders.PCauto_video import PCautoVideoSpider
+
 from spiders.PCauto_hangqing import PCautoHangqingSpider
 from spiders.PCauto_newcar import PCautoNewCarSpider
 from spiders.PCauto_daogou import PCautoDaogouSpider
+from spiders.PCauto_pingce import PCautoPingceSpider
 
 import pymongo
 
@@ -95,7 +97,8 @@ def crawl():
 
     # yield runner.crawl(PCautoHangqingSpider())
     # yield runner.crawl(PCautoNewCarSpider())
-    yield runner.crawl(PCautoDaogouSpider())
+    # yield runner.crawl(PCautoDaogouSpider())
+    yield runner.crawl(PCautoPingceSpider())
 
     reactor.stop()
 

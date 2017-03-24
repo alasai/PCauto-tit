@@ -5,13 +5,13 @@ from scrapy.http import Request
 from bs4 import BeautifulSoup
 import time
 from PCauto import pipelines
-from PCauto.items import PCautoNewCarItem
+from PCauto.items import PCautoPingceItem
 
-class PCautoNewCarSpider(RedisSpider):
-    name = 'PCauto_newcar'
-    index_page = 'http://www.pcauto.com.cn/nation/'
+class PCautoPingceSpider(RedisSpider):
+    name = 'PCauto_pingce'
+    index_page = 'http://www.pcauto.com.cn/pingce/'
 
-    pipeline = set([pipelines.NewCarPipeline, ])
+    pipeline = set([pipelines.PingcePipeline, ])
 
     def start_requests(self):
         yield Request(self.index_page, callback=self.get_nav)
@@ -43,9 +43,9 @@ class PCautoNewCarSpider(RedisSpider):
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        result = PCautoNewCarItem()
+        result = PCautoPingceItem()
 
-        result['category'] = '新车'
+        result['category'] = '评测'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 

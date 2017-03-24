@@ -67,6 +67,9 @@ class PCautoNewCarItem(BaseItem):
 class PCautoDaogouItem(BaseItem):
     pass
 
+class PCautoPingceItem(BaseItem):
+    pass
+
 
 
 

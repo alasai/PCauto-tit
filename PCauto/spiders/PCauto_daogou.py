@@ -45,7 +45,7 @@ class PCautoDaogouSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         result = PCautoDaogouItem()
 
-        result['category'] = ''
+        result['category'] = '导购'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
