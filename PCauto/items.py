@@ -88,6 +88,9 @@ class PCautoGaizhuangItem(BaseItem):
 class PCautoHangyeItem(BaseItem):
     pass
 
+class PCautoMotoSportItem(BaseItem):
+    pass
+
 
 
 
