@@ -29,8 +29,11 @@ class PCautoKejiSpider(RedisSpider):
         model = etree.HTML(response.body_as_unicode())
         articles = model.xpath('//div[@class="list-wrap"]//li')
         for article in articles:
-            href = article.xpath('./i/a/@href')[0]
-            yield Request(href, callback=self.get_url)
+            href = article.xpath('./dl/dt/a/@href')[0]
+            if href != 'null':
+                yield Request(href, callback=self.get_url)
+            else:
+                print 'error article: ' + article.xpath('./dl/dt/a')[0].text
 
         next_page = model.xpath('//div[@id="page"]/a[@class="next"]')
         if next_page:

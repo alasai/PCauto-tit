@@ -120,3 +120,6 @@ class PCautoChedaiItem(SimpleItem):
 
 class PCautoKejiItem(SimpleItem):
     pass
+
+class PCautoHangjiaItem(SimpleItem):
+    pass
