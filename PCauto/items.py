@@ -91,6 +91,9 @@ class PCautoHangyeItem(BaseItem):
 class PCautoMotoSportItem(BaseItem):
     pass
 
+class PCautoCultureItem(BaseItem):
+    pass
+
 
 
 

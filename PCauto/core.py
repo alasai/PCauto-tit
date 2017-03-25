@@ -41,6 +41,7 @@ from spiders.PCauto_machineoil import PCautoMachineOilSpider
 from spiders.PCauto_gaizhuang import PCautoGaizhuangSpider
 from spiders.PCauto_hangye import PCautoHangyeSpider
 from spiders.PCauto_saishi import PCautoMotoSportSpider
+from spiders.PCauto_culture import PCautoCultureSpider
 
 import pymongo
 
@@ -114,7 +115,8 @@ def crawl():
     # yield runner.crawl(PCautoMachineOilSpider())
     # yield runner.crawl(PCautoGaizhuangSpider())
     # yield runner.crawl(PCautoHangyeSpider())
-    yield runner.crawl(PCautoMotoSportSpider())
+    # yield runner.crawl(PCautoMotoSportSpider())
+    yield runner.crawl(PCautoCultureSpider())
 
     reactor.stop()
 
