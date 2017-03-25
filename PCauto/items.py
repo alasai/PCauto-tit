@@ -117,3 +117,6 @@ class PCautoMallImportItem(SimpleItem):
 
 class PCautoChedaiItem(SimpleItem):
     pass
+
+class PCautoKejiItem(SimpleItem):
+    pass

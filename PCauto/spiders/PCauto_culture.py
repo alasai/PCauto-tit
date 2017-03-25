@@ -77,6 +77,11 @@ class PCautoCultureSpider(RedisSpider):
             if crumbs:
                 text = crumbs[0].xpath('string()')
                 result['address'] = text
+        # video(1)
+        breadcrumb = model.xpath('//div[@class="breadcrumb"]')
+        if breadcrumb:
+            text = breadcrumb[0].xpath('string()')
+            result['address'] = text
 
         yield result
 
