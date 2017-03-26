@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'PCauto.spiders'
 #USER_AGENT = 'PCauto (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -103,6 +103,7 @@ ITEM_PIPELINES = {
    'PCauto.pipelines.CulturePipeline': 332,
    'PCauto.pipelines.KejiPipeline': 333,
    'PCauto.pipelines.HangjiaPipeline': 334,
+   'PCauto.pipelines.BaikePipeline': 335,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

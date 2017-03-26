@@ -123,3 +123,6 @@ class PCautoKejiItem(SimpleItem):
 
 class PCautoHangjiaItem(SimpleItem):
     pass
+
+class PCautoBaikeItem(SimpleItem):
+    pass
