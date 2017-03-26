@@ -383,3 +383,12 @@ class ProductPipeline(object):
     def process_item(self, item, spider):
         self.collection.insert(dict(item))
         return item
+
+class ChepinPipeline(object):
+    def __init__(self):
+        self.collection = get_mongo_collection('Chepin')
+
+    @check_spider_pipeline
+    def process_item(self, item, spider):
+        self.collection.insert(dict(item))
+        return item

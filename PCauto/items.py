@@ -97,6 +97,9 @@ class PCautoCultureItem(BaseItem):
 class PCautoProductItem(BaseItem):
     pass
 
+class PCautoChepinItem(BaseItem):
+    pass
+
 
 
 
