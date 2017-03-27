@@ -392,3 +392,12 @@ class ChepinPipeline(object):
     def process_item(self, item, spider):
         self.collection.insert(dict(item))
         return item
+
+class RankPipeline(object):
+    def __init__(self):
+        self.collection = get_mongo_collection('Rank')
+
+    @check_spider_pipeline
+    def process_item(self, item, spider):
+        self.collection.insert(dict(item))
+        return item

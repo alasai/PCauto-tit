@@ -47,6 +47,7 @@ from spiders.PCauto_hj import PCautoHangjiaSpider
 from spiders.PCauto_baike import PCautoBaikeSpider
 from spiders.PCauto_product import PCautoProductSpider
 from spiders.PCauto_chepin import PCautoChepinSpider
+from spiders.PCauto_rank import PCautoRankSpider
 
 import pymongo
 
@@ -126,7 +127,8 @@ def crawl():
     # yield runner.crawl(PCautoHangjiaSpider())
     # yield runner.crawl(PCautoBaikeSpider())
     # yield runner.crawl(PCautoProductSpider())
-    yield runner.crawl(PCautoChepinSpider())
+    # yield runner.crawl(PCautoChepinSpider())
+    yield runner.crawl(PCautoRankSpider())
 
     reactor.stop()
 

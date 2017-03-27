@@ -100,6 +100,9 @@ class PCautoProductItem(BaseItem):
 class PCautoChepinItem(BaseItem):
     pass
 
+class PCautoRankItem(BaseItem):
+    pass
+
 
 
 
