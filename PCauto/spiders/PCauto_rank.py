@@ -10,14 +10,14 @@ from PCauto.items import PCautoRankItem
 
 class PCautoRankSpider(RedisSpider):
     name = 'PCauto_rank'
-    # index_page = 'http://price.pcauto.com.cn/top/r3/'
-    index_page = 'http://price.pcauto.com.cn/top/hot/s1-t1.html'
+    index_page = 'http://price.pcauto.com.cn/top/r3/'
+    # index_page = 'http://price.pcauto.com.cn/top/hot/s1-t1.html'
     api_url = 'http://price.pcauto.com.cn%s'
 
     pipeline = set([pipelines.RankPipeline, ])
 
     def start_requests(self):
-        yield Request(self.index_page, callback=self.get_other_rank)
+        yield Request(self.index_page, callback=self.get_left_nav)
 
     def get_left_nav(self,response):
         model = etree.HTML(response.body_as_unicode())
