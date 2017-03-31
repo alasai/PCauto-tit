@@ -17,7 +17,9 @@ class PCautoCommentSpider(RedisSpider):
         for url in comment_urls:
             yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
             yield Request(url, callback=self.get_comment)
-
+            url_not_sale = url + 'sale/'
+            yield Request(url_not_sale, dont_filter=True, callback=self.get_vehicleTypes)
+            yield Request(url_not_sale, callback=self.get_comment)
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
@@ -27,7 +29,6 @@ class PCautoCommentSpider(RedisSpider):
             for vehicle in vehicles:
                 href = vehicle.find('a').get('href')
                 yield Request(href, callback=self.get_comment)
-
 
     def get_comment(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
