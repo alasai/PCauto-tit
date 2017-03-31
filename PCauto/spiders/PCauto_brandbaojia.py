@@ -23,9 +23,6 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         vehicleList = soup.find('div',id="typeList")
         if vehicleList:
-            # onsale vehicle model
-            # vehicles = vehicleList.find('div',class_='contentdiv').find('ul').find_all('li')
-
             # find all vehicle models
             vehicles = vehicleList.find_all('li')
             for vehicle in vehicles:
@@ -74,13 +71,6 @@ class PCautoBrandBaojiaSpider(RedisSpider):
                 text = mark.get_text().strip().replace('\n','').replace('\r','')
                 result['address'] = text
         yield result
-
-        # place = soup.find('div',class_="position")
-        # if place:
-        #     text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
-        #     result['address'] = text
-
-
 
     def spider_idle(self):
         """This function is to stop the spider"""
