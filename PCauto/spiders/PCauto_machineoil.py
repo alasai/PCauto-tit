@@ -2,7 +2,6 @@
 
 from scrapy_redis.spiders import RedisSpider
 from scrapy.http import Request
-from bs4 import BeautifulSoup
 from lxml import etree
 import time
 from PCauto import pipelines
@@ -43,39 +42,26 @@ class PCautoMachineOilSpider(RedisSpider):
 
 
     def get_url(self,response):
-        # soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         model = etree.HTML(response.body_as_unicode())
         result = PCautoMachineOilItem()
 
         result['category'] = '机油'
         result['url'] = response.url
-        # result['tit'] = soup.find('title').get_text().strip()
         result['tit'] = model.xpath('//title')[0].text.strip()
 
-        # place = soup.find('div',class_="guide")
         place = model.xpath('//div[@class="guide"]')
         # nav and aiticle
         if place:
-            # mark = place.find('span',class_="mark")
             mark = place[0].xpath('./span[@class="mark"]')
             if mark:
-                # text = mark.get_text().strip().replace('\n','').replace('\r','')
-                # text = mark[0].text.strip().replace('\n','').replace('\r','')  # false
                 text = mark[0].xpath('string()')
                 result['address'] = text
-            # crumbs = place.find('div', class_='crumbs')
             crumbs = place[0].xpath('./div[@class="crumbs"]')
             if crumbs:
-                # text = crumbs.get_text().strip().replace('\n', '').replace('\r', '')
-                # text = crumbs[0].text.strip().replace('\n', '').replace('\r', '') # false
                 text = crumbs[0].xpath('string()')
                 result['address'] = text
-        # video(none)
-        # breadcrumb = soup.find('div', class_='breadcrumb')
         breadcrumb = model.xpath('//div[@class="breadcrumb"]')
         if breadcrumb:
-            # text = breadcrumb.get_text().strip().replace('\n','').replace('\r','')
-            # text = breadcrumb[0].text.strip().replace('\n','').replace('\r','') # false
             text = breadcrumb[0].xpath('string()')
             result['address'] = text
 

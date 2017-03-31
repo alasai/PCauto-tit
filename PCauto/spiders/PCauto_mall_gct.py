@@ -19,7 +19,6 @@ class PCautoMallGCTSpider(RedisSpider):
 
 
     def start_requests(self):
-        # yield Request(self.mall_url, callback=self.get_city)
         yield Request(self.city_js_url, callback=self.get_city)
 
     def get_city(self,response):
@@ -27,12 +26,6 @@ class PCautoMallGCTSpider(RedisSpider):
         city_id_list = re.findall(r'"cityId":"(\d+)"',body)
         for city_id in city_id_list:
             yield Request(self.api_url % city_id, callback=self.get_tuangou)
-
-        # soup = BeautifulSoup(response.body_as_unicode())
-        # citys = soup.find('div', id='cityArea1').find_all('a')
-        # for city in citys:
-        #     city_id = city.get('data-mid')
-        #     yield Request(self.api_url % city_id, callback=self.get_tuangou)
 
     def get_tuangou(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')

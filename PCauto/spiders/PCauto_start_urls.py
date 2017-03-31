@@ -10,7 +10,6 @@ from PCauto.mongodb import mongoservice
 class PCautoBrandListUrlSpider(RedisSpider):
     name="PCauto_start"
     get_brand_url = 'http://price.pcauto.com.cn/cars/'
-    # api_brand_url = 'http://www.autohome.com.cn/grade/carhtml/%s.html'
 
 
     def start_requests(self):

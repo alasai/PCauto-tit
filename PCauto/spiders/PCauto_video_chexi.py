@@ -19,9 +19,6 @@ class PCautoVideoBrandSpider(RedisSpider):
     pipeline = set([pipelines.VideoBrandPipeline, ])
 
     def start_requests(self):
-        # yield Request(self.test_url, headers={
-        #     'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'
-        # }, callback=self.do_test)
         yield Request(self.bid_url, callback=self.get_brand)
 
     def do_test(self,response):

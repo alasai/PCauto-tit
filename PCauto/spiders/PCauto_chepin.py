@@ -33,12 +33,6 @@ class PCautoChepinSpider(RedisSpider):
         yield Request(csyw_url, dont_filter=True, callback=self.get_page)
         yield Request(csyw_url, callback=self.get_url)
 
-        # columns = model.xpath('//div[@class="box box-2 box-4 mt25"]//h2[@class="mark"]')
-        # for column in columns:
-        #     column_url = column.xpath('./a/@href')[0]
-        #     yield Request(column_url, dont_filter=True, callback=self.get_page)
-        #     yield Request(column_url, callback=self.get_url)
-
     def get_page(self,response):
         model = etree.HTML(response.body_as_unicode())
         articles = model.xpath('//div[@class="box list"]//div[@class="pic-txt clearfix"]')

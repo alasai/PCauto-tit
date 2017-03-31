@@ -15,7 +15,6 @@ class PCautoDealerModelSpider(RedisSpider):
     name = 'PCauto_dealer_model'
     pipeline = set([pipelines.DealerModelPipeline, ])
     root_url = 'http://price.pcauto.com.cn'
-    # page_url = 'http://price.pcauto.com.cn/%s/p%d/model.html#model'
 
     def start_requests(self):
         urls = mongoservice.get_dealer_model()
@@ -27,10 +26,6 @@ class PCautoDealerModelSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         model = soup.find('div', id='model').find('i').find('em').get_text()
         if model:
-            # # catch dealer num
-            # ma = re.search(r'.cn/(\d+)',response.url)
-            # dealer_num = ma.group(1)
-
             # make page root url
             ma = re.search(r'(.*)/model', response.url)
             suffix = '/p%d/model.html#model'
@@ -44,20 +39,6 @@ class PCautoDealerModelSpider(RedisSpider):
             for page_num in range(1,int(model_num) + 1):
                 yield Request(page_url % page_num, dont_filter=True, callback=self.get_car)
                 yield Request(page_url % page_num, callback=self.get_url)
-                # yield Request(self.page_url % (dealer_num,page_num), callback=self.get_car)
-                # yield Request(self.page_url % (dealer_num,page_num), headers={
-                #     'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0"
-                # },callback=self.get_car)
-
-        # to find next page (can't find the pager)
-        # pagelist = soup.find('div', id='pager').find('div',class_='pagelist')
-        # if pagelist:
-        #     next_page = pagelist.find('a', class_='current').find_next('a')
-        #     if next_page:
-        #         page_num = next_page.get_text()
-        #         ma = re.search(r'.cn/(\d)',response.url)
-        #         dealer_num = ma.group(1)
-        #         yield Request(self.page_url % (dealer_num,page_num), callback=self.get_page)
 
     def get_car(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')

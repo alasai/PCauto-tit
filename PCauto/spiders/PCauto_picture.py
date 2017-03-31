@@ -150,24 +150,6 @@ class PCautoBrandPictureSpider(RedisSpider):
 
         yield result
 
-    # def get_types_old(self,response):
-    #     soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-    #     types = soup.find('div',class_='tbA').find_all('div',class_='tit-a clearfix')
-    #     for type in types:
-    #         more_info = type.find('a')
-    #         if more_info:
-    #             more_url = more_info.get('href')
-    #             yield Request(self.api_url % more_url, dont_filter=True, callback=self.get_page)
-    #             yield Request(self.api_url % more_url, callback=self.get_url)
-    #         else:
-    #             list = type.find_next_sibling('ul')
-    #             if list:
-    #                 pictures = list.find_all('li')
-    #                 for pic in pictures:
-    #                     href = pic.find('a').get('href')
-    #                     yield Request(self.api_url % href, callback=self.get_url)
-
-
 
     def spider_idle(self):
         """This function is to stop the spider"""

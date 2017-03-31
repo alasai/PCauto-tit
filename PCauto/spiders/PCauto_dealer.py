@@ -88,16 +88,6 @@ class PCautoDealerSpider(RedisSpider):
                     key = ma.group(2) + '_url'
                     result[key] = self.root % url
 
-                # if url:
-                #     if 'model' in url:
-                #         result['model_url'] = self.root + url
-                #     elif 'market' in url:
-                #         result['market_url'] = self.root + url
-                #     elif 'news' in url:
-                #         result['news_url'] = self.root + url
-                #     elif 'contact' in url:
-                #         result['contact_url'] = self.root + url
-
             put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
             save_result = json.loads(put_result)
             mongoservice.save_dealer(save_result)

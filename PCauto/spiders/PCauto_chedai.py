@@ -29,7 +29,6 @@ class PCautoChedaiSpider(RedisSpider):
         for url in urls:
             ma = re.search(r'sg(\d+)', url)
             sid = ma.group(1)
-            # yield Request(self.get_model_url % sid, callback=self.get_model)
             for city_id in city_id_list:
                 # # 拿到对应车型信息
                 yield Request(self.get_model_url % sid, callback=self.get_model, meta={"cityId":city_id})

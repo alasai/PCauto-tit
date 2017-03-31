@@ -22,12 +22,6 @@ class PCautoDealerNewsSpider(RedisSpider):
                 'Host': "price.pcauto.com.cn",
                 'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0",
-                # 'Accept-Language': "en-US,en;q=0.5",
-                # 'Accept-Encoding': "gzip, deflate",
-                # 'Referer': "http://price.pcauto.com.cn/89452/news.html",
-                # 'Connection': "keep-alive",
-                # 'Cache-Control': "max-age=0",
-                # 'Upgrade-Insecure-Requests': "1"
             }, callback=self.get_news)
             yield Request(url, callback=self.get_url)
 

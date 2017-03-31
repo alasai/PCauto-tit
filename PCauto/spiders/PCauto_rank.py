@@ -34,7 +34,6 @@ class PCautoRankSpider(RedisSpider):
 
 
     def get_sales_rank(self,response):
-        # //div[@class="sel-date-box"]
         model = etree.HTML(response.body_as_unicode())
         year_list = model.xpath('//ul[@class="ul-yy"]/li')
         mon_list = model.xpath('//ul[@class="ul-mon"]/li')

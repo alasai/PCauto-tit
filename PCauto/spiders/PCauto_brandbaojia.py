@@ -50,15 +50,6 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         # request for vehicleType_baojia
         yield Request(response.url + 'price.html', callback=self.get_url)
 
-        # vehicleList = soup.find('div',id="typeList")
-        # if vehicleList:
-        #     saleTypes = vehicleList.find_all('div',class_='contentdiv')
-        #     for type in saleTypes:
-        #         vehicles = type.find('ul').find_all('li')
-        #         for vehicle in vehicles:
-        #             href = vehicle.find('a').get('href')
-        #             yield Request(href, callback=self.get_url)
-
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')

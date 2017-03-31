@@ -53,8 +53,6 @@ class PCautoThemeForumSpider(RedisSpider):
         place = soup.find('div',class_="com-subHead add-link-gzcz BtmNoBor")
         if place:
             text_raw = place.find('div',class_="com-crumb").get_text().strip().replace('\n','').replace('\r','')
-            # ma = re.match(r'(.*)\[',text_raw)
-            # text = ma.group(1)
             ma = re.match(r'\S+',text_raw)
             text = ma.group()
             result['address'] = text
