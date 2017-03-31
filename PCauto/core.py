@@ -86,11 +86,11 @@ runner = CrawlerRunner(settings)
 def crawl():
     # yield runner.crawl(PCautoStartSpider)
     # yield runner.crawl(ConfigSpider)
-    # yield runner.crawl(BaojiaUrlSpider)
+    yield runner.crawl(BaojiaUrlSpider)
     # yield runner.crawl(UsedCarUrlSpider)
     # yield runner.crawl(ArticleSpider)
     # yield runner.crawl(PictureSpider)
-    # yield runner.crawl(CommentSpider)
+    yield runner.crawl(CommentSpider)
     # yield runner.crawl(OwnerPriceSpider)
     # yield runner.crawl(BaoyangSpider)
     # yield runner.crawl(BrandYouhuiSpider)
@@ -125,7 +125,7 @@ def crawl():
     # yield runner.crawl(PCautoBaikeSpider())
     # yield runner.crawl(PCautoProductSpider())
     # yield runner.crawl(PCautoChepinSpider())
-    yield runner.crawl(PCautoRankSpider())
+    # yield runner.crawl(PCautoRankSpider())
 
     reactor.stop()
 

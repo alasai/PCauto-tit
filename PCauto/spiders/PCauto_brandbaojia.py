@@ -23,7 +23,11 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         vehicleList = soup.find('div',id="typeList")
         if vehicleList:
-            vehicles = vehicleList.find('div',class_='contentdiv').find('ul').find_all('li')
+            # onsale vehicle model
+            # vehicles = vehicleList.find('div',class_='contentdiv').find('ul').find_all('li')
+
+            # find all vehicle models
+            vehicles = vehicleList.find_all('li')
             for vehicle in vehicles:
                 href = vehicle.find('a').get('href')
                 yield Request(href, callback=self.save_vehicleType)
