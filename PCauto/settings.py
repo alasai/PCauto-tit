@@ -27,7 +27,7 @@ NEWSPIDER_MODULE = 'PCauto.spiders'
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -139,9 +139,11 @@ DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 SCHEDULER_PERSIST = True
 
 
-MONGODB_SERVER = "192.168.197.132"
+# MONGODB_SERVER = "192.168.197.132"
+MONGODB_SERVER = "192.168.7.127"
 MONGODB_PORT = 27017
-MONGODB_DB = "PCauto"
+MONGODB_DB = "PCauto_tit"
 
-REDIS_HOST = "192.168.197.132"
+# REDIS_HOST = "192.168.197.132"
+REDIS_HOST = "192.168.7.126"
 REDIS_PORT = 6379
