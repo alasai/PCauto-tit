@@ -21,11 +21,13 @@ class PCautoBrandBaojiaSpider(RedisSpider):
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        # find all vehicle models
-        vehicles = soup.find('div',id="typeList").find_all('li')
-        for vehicle in vehicles:
-            href = vehicle.find('a').get('href')
-            yield Request(href, callback=self.save_vehicleType)
+        # 有可能没有 typeList
+        typeList = soup.find('div',id="typeList")
+        if typeList:
+            vehicles = typeList.find_all('li')
+            for vehicle in vehicles:
+                href = vehicle.find('a').get('href')
+                yield Request(href, callback=self.save_vehicleType)
 
     def save_vehicleType(self,response):
         # start save vehicleType index
