@@ -21,13 +21,11 @@ class PCautoBrandBaojiaSpider(RedisSpider):
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        vehicleList = soup.find('div',id="typeList")
-        if vehicleList:
-            # find all vehicle models
-            vehicles = vehicleList.find_all('li')
-            for vehicle in vehicles:
-                href = vehicle.find('a').get('href')
-                yield Request(href, callback=self.save_vehicleType)
+        # find all vehicle models
+        vehicles = soup.find('div',id="typeList").find_all('li')
+        for vehicle in vehicles:
+            href = vehicle.find('a').get('href')
+            yield Request(href, callback=self.save_vehicleType)
 
     def save_vehicleType(self,response):
         # start save vehicleType index
@@ -38,13 +36,13 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
-        place = soup.find('div', class_="position").find('div', class_="pos-mark")
-        if place:
-            text = place.get_text().strip().replace('\n', '').replace('\r','')
+        position = soup.find('div', class_="position")
+        # 平行进口车没有 position
+        if position:
+            text = position.find('div', class_="pos-mark").get_text().strip().replace('\n', '').replace('\r','')
             result['address'] = text
 
-        put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True,
-                                encoding='utf8').encode('utf8')
+        put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
         save_result = json.loads(put_result)
         mongoservice.save_vehicleType(save_result)
 
