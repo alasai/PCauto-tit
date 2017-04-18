@@ -15,8 +15,19 @@ class PCautoOwnerPriceSpider(RedisSpider):
     def start_requests(self):
         owner_price_urls = mongoservice.get_owner_price()
         for url in owner_price_urls:
-            yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
-            yield Request(url, callback=self.get_url)
+            # yield Request(url, dont_filter=True, headers={
+            #     'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+            # },callback=self.get_sales_column)
+            yield Request(url, dont_filter=True, callback=self.get_sales_column)
+
+
+    def get_sales_column(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        columns = soup.find('div', class_='col-m-2').find('span').find_all('a')
+        for column in columns :
+            href = column.get('href')
+            yield Request(href, dont_filter=True, callback=self.get_vehicleTypes)
+            yield Request(href, callback=self.get_url)
 
 
     def get_vehicleTypes(self,response):
