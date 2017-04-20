@@ -25,7 +25,9 @@ class PCautoMallGCTSpider(RedisSpider):
         body = response._body
         city_id_list = re.findall(r'"cityId":"(\d+)"',body)
         for city_id in city_id_list:
-            yield Request(self.api_url % city_id, callback=self.get_tuangou)
+            city_url = self.api_url % city_id
+            yield Request(city_url, dont_filter=True, callback=self.get_tuangou)
+            yield Request(city_url, callback=self.get_url)
 
     def get_tuangou(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
@@ -41,6 +43,11 @@ class PCautoMallGCTSpider(RedisSpider):
         result['category'] = '汽车商城-购车团'
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
+
+        place = soup.find('div',class_="smnavl")
+        if place:
+            text = place.get_text().strip().replace('\n','').replace('\r','')
+            result['address'] = text
 
         yield result
 
