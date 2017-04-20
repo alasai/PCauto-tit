@@ -103,6 +103,11 @@ class PCautoChepinItem(BaseItem):
 class PCautoRankItem(BaseItem):
     pass
 
+class PCautoMallGCTItem(BaseItem):
+    pass
+
+class PCautoMallImportItem(BaseItem):
+    pass
 
 
 
@@ -116,12 +121,6 @@ class PCautoDealerMarketItem(SimpleItem):
     pass
 
 class PCautoDealerNewsItem(SimpleItem):
-    pass
-
-class PCautoMallGCTItem(SimpleItem):
-    pass
-
-class PCautoMallImportItem(SimpleItem):
     pass
 
 class PCautoChedaiItem(SimpleItem):
