@@ -11,7 +11,7 @@ from PCauto import pipelines
 
 class PCautoYouhuiSpider(RedisSpider):
     name = 'PCauto_youhui'
-    youhui_url = 'http://price.pcauto.com.cn/youhui'
+    youhui_url = 'http://price.pcauto.com.cn'
     api_url = 'http://price.pcauto.com.cn/youhui/r%s/'
     city_js_url = 'http://www.pcauto.com.cn/global/1603/intf8771.js'
 
