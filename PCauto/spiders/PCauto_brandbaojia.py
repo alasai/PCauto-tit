@@ -21,13 +21,10 @@ class PCautoBrandBaojiaSpider(RedisSpider):
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        vehicleList = soup.find('div',id="typeList")
-        if vehicleList:
-            # onsale vehicle model
-            # vehicles = vehicleList.find('div',class_='contentdiv').find('ul').find_all('li')
-
-            # find all vehicle models
-            vehicles = vehicleList.find_all('li')
+        # 有可能没有 typeList
+        typeList = soup.find('div',id="typeList")
+        if typeList:
+            vehicles = typeList.find_all('li')
             for vehicle in vehicles:
                 href = vehicle.find('a').get('href')
                 yield Request(href, callback=self.save_vehicleType)
@@ -41,9 +38,10 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         result['url'] = response.url
         result['tit'] = soup.find('title').get_text().strip()
 
-        place = soup.find('div', class_="position").find('div', class_="pos-mark")
-        if place:
-            text = place.get_text().strip().replace('\n', '').replace('\r','')
+        position = soup.find('div', class_="position")
+        # 平行进口车没有 position
+        if position:
+            text = position.find('div', class_="pos-mark").get_text().strip().replace('\n', '').replace('\r','')
             result['address'] = text
 
         put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True,
