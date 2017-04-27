@@ -25,6 +25,6 @@ class RotateUserAgentMiddleware(object):
     def process_response(self, request, response, spider):
         # print nunormal http status response
         if 200 != response.status:
-            logger.info('Crawled (%s) <GET %s>', (response.status,response.url))
+            logger.info('Crawled (%d) <GET %s>' % (response.status,response.url))
         return response
 
