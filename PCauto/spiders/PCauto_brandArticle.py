@@ -13,11 +13,16 @@ class PCautoArticleSpider(RedisSpider):
     api_url = 'http://price.pcauto.com.cn%s'
     pipeline = set([ArticlePipeline, ])
 
+    # test_urls = ['http://price.pcauto.com.cn/sg3543/article/p25.html','http://price.pcauto.com.cn/sg8238/article/p1.html']
+
     def start_requests(self):
         article_urls = mongoservice.get_article_url()
         for url in article_urls:
             yield Request(url, dont_filter=True, callback=self.get_articles)
             yield Request(url, callback=self.get_url)
+        # for url in self.test_urls:
+        #     yield Request(url, dont_filter=True, callback=self.get_articles)
+        #     yield Request(url, callback=self.get_url)
 
     def get_articles(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
@@ -47,7 +52,7 @@ class PCautoArticleSpider(RedisSpider):
         # 车系页标签
         place = soup.find('div',class_="position")
         if place:
-            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
+            text = place.get_text().strip().replace('\n','').replace('\r','')
             result['address'] = text
 
         # 文章页标签
