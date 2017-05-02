@@ -24,10 +24,18 @@ class PCautoBrandBaojiaSpider(RedisSpider):
         # 有可能没有 typeList
         typeList = soup.find('div',id="typeList")
         if typeList:
-            vehicles = typeList.find_all('li')
-            for vehicle in vehicles:
-                href = vehicle.find('a').get('href')
-                yield Request(href, callback=self.save_vehicleType)
+            bar_list = typeList.find_all('div', class_='bar')
+            for bar in bar_list:
+                type_name = bar.find('span').get_text().strip()
+                if type_name != u'平行进口车':
+                    vehicle_lst = bar.find_next_sibling('ul')
+                    vehicles = vehicle_lst.find_all('li')
+                    for vehicle in vehicles:
+                        href = vehicle.find('a').get('href')
+                        yield Request(href, callback=self.save_vehicleType)
+                else:
+                    print 'do not print 平行进口车, parent url <%s>' % response.url
+
 
     def save_vehicleType(self,response):
         # start save vehicleType index
