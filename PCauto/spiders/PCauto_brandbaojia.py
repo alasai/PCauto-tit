@@ -12,22 +12,38 @@ from PCauto import pipelines
 class PCautoBrandBaojiaSpider(RedisSpider):
     name = 'PCauto_baojia'
     pipeline = set([pipelines.BrandBaojiaPipeline, ])
+    # test_url = 'http://price.pcauto.com.cn/sg1644/price.html'
 
     def start_requests(self):
         baojia_urls = mongoservice.get_baojia_url()
         for url in baojia_urls :
             yield Request(url, dont_filter=True, callback=self.get_vehicleTypes)
             yield Request(url, callback=self.get_url)
+        # yield Request(self.test_url, dont_filter=True, callback=self.get_vehicleTypes)
+        # yield Request(self.test_url, callback=self.get_url)
+
 
     def get_vehicleTypes(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         # 有可能没有 typeList
         typeList = soup.find('div',id="typeList")
         if typeList:
-            vehicles = typeList.find_all('li')
-            for vehicle in vehicles:
-                href = vehicle.find('a').get('href')
-                yield Request(href, callback=self.save_vehicleType)
+            bar_list = typeList.find_all('div', class_='bar')
+            for bar in bar_list:
+                type_name = bar.find('span').get_text().strip()
+                if type_name != u'平行进口车':
+                    vehicle_lst = bar.find_next_sibling('ul')
+                    vehicles = vehicle_lst.find_all('li')
+                    for vehicle in vehicles:
+                        href = vehicle.find('a').get('href')
+                        yield Request(href, callback=self.save_vehicleType)
+                else:
+                    print 'do not print 平行进口车, parent url <%s>' % response.url
+
+            # vehicles = typeList.find_all('li')
+            # for vehicle in vehicles:
+            #     href = vehicle.find('a').get('href')
+            #     yield Request(href, callback=self.save_vehicleType)
 
     def save_vehicleType(self,response):
         # start save vehicleType index
@@ -44,22 +60,12 @@ class PCautoBrandBaojiaSpider(RedisSpider):
             text = position.find('div', class_="pos-mark").get_text().strip().replace('\n', '').replace('\r','')
             result['address'] = text
 
-        put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True,
-                                encoding='utf8').encode('utf8')
+        put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
         save_result = json.loads(put_result)
         mongoservice.save_vehicleType(save_result)
 
         # request for vehicleType_baojia
         yield Request(response.url + 'price.html', callback=self.get_url)
-
-        # vehicleList = soup.find('div',id="typeList")
-        # if vehicleList:
-        #     saleTypes = vehicleList.find_all('div',class_='contentdiv')
-        #     for type in saleTypes:
-        #         vehicles = type.find('ul').find_all('li')
-        #         for vehicle in vehicles:
-        #             href = vehicle.find('a').get('href')
-        #             yield Request(href, callback=self.get_url)
 
 
     def get_url(self,response):
@@ -81,13 +87,6 @@ class PCautoBrandBaojiaSpider(RedisSpider):
                 text = mark.get_text().strip().replace('\n','').replace('\r','')
                 result['address'] = text
         yield result
-
-        # place = soup.find('div',class_="position")
-        # if place:
-        #     text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
-        #     result['address'] = text
-
-
 
     def spider_idle(self):
         """This function is to stop the spider"""
