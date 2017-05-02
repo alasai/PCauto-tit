@@ -47,7 +47,7 @@ class PCautoArticleSpider(RedisSpider):
         # 车系页标签
         place = soup.find('div',class_="position")
         if place:
-            text = place.find('div',class_="pos-mark").get_text().strip().replace('\n','').replace('\r','')
+            text = place.get_text().strip().replace('\n','').replace('\r','')
             result['address'] = text
 
         # 文章页标签
