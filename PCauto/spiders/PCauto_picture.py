@@ -72,11 +72,29 @@ class PCautoBrandPictureSpider(RedisSpider):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
         types = soup.find('div',class_='row bdn').find_all('li', class_=True)
         for type in types:
+            # 大类
+            dd_one = type.find('dl').find('dd', class_='one')
+            type_one_url = dd_one.find('a').get('href')
+            if type_one_url:
+                yield Request(self.api_url % type_one_url, dont_filter=True, callback=self.get_page)
+            else:
+                print 'url not exists.'
+            # 所属小类
             dds = type.find('dl').find_all('dd')
             for dd in dds:
                 type_url = dd.find('a').get('href')
-                yield Request(self.api_url % type_url, dont_filter=True, callback=self.get_page)
-                yield Request(self.api_url % type_url, callback=self.get_url)
+                if type_url:
+                    yield Request(self.api_url % type_url, callback=self.get_url)
+                else:
+                    print 'url not exists.'
+
+                # if type_url:
+                #     class_info = dd['class'] # dd.get('class') retures a list
+                #     if class_info == 'one':
+                #         yield Request(self.api_url % type_url, dont_filter=True, callback=self.get_page)
+                #     yield Request(self.api_url % type_url, callback=self.get_url)
+                # else:
+                #     print 'url not exists.'
 
 
     def get_items(self,response):
