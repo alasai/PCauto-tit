@@ -24,6 +24,11 @@ def save_dealer_index(result):
     collection = db['DealerIndex']
     collection.save(result)
 
+def save_dealer_other(result):
+    collection = db['DealerOther']
+    collection.save(result)
+
+
 def get_config_url():
     collection = db['Brand']
     starturls = set()

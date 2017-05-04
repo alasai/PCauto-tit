@@ -17,9 +17,11 @@ class PCautoDealerSpider(RedisSpider):
 
     pipeline = set([pipelines.DealerPipeline, ])
 
+    # test_url = 'http://price.pcauto.com.cn/shangjia/c3/nb3/'
 
     def start_requests(self):
         yield Request(self.index_page,callback=self.get_brand)
+        # yield Request(self.test_url, callback=self.get_page)
 
 
     def get_brand(self,response):
@@ -48,11 +50,14 @@ class PCautoDealerSpider(RedisSpider):
         list_body = soup.find('div',class_="listTb")
         if list_body:
             # save dealer url
-            dealers = list_body.find('ul').find_all('li')
-            for dealer in dealers:
-                href = dealer.find('div',class_='divYSd').find('a').get('href')
-                yield Request(href, dont_filter=True, callback=self.get_dealer)
-                yield Request(href, callback=self.get_url)
+            ul = list_body.find('ul')
+            # ul may not exists
+            if ul:
+                dealers = ul.find_all('li')
+                for dealer in dealers:
+                    href = dealer.find('div',class_='divYSd').find('a').get('href')
+                    yield Request(href, dont_filter=True, callback=self.get_dealer)
+                    yield Request(href, callback=self.get_url)
 
             # get next page
             page_info = list_body.find('div',class_='pcauto_page')
@@ -101,6 +106,17 @@ class PCautoDealerSpider(RedisSpider):
             put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True, encoding='utf8').encode('utf8')
             save_result = json.loads(put_result)
             mongoservice.save_dealer(save_result)
+        else:
+            topnav_other = soup.find('div', class_="nav")
+            if topnav_other:
+                result = dict()
+                result['index'] = response.url
+                put_result = json.dumps(dict(result), ensure_ascii=False, sort_keys=True,
+                                        encoding='utf8').encode('utf8')
+                save_result = json.loads(put_result)
+                mongoservice.save_dealer_other(save_result)
+            else:
+                print 'topnav not exists.'
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
