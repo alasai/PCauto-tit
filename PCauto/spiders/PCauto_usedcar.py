@@ -13,17 +13,14 @@ class PCautoUsedcarSpider(RedisSpider):
     name = 'PCauto_usedcar'
     api_url = 'https://www.guazi.com%s'
     guazi_url = 'https://www.guazi.com/www/buy/'
-    guazi_headers = {
-        'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0"
-    }
 
     pipeline = set([pipelines.UsedCarPipeline, ])
 
 
     def start_requests(self):
-        usedcar_urls = mongoservice.get_usedcar_url()
-        for url in usedcar_urls:
-            yield Request(url, callback=self.get_url)
+        # usedcar_urls = mongoservice.get_usedcar_url()
+        # for url in usedcar_urls:
+        #     yield Request(url, callback=self.get_url)
         yield Request(self.guazi_url, callback=self.get_page)
 
 
