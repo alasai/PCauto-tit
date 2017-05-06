@@ -188,7 +188,7 @@ class DealerModelPipeline(object):
 
 class DealerOtherPipeline(object):
     def __init__(self):
-        self.collection = get_mongo_collection('DealerOther')
+        self.collection = get_mongo_collection('DealerOtherPrice')
 
     @check_spider_pipeline
     def process_item(self, item, spider):
