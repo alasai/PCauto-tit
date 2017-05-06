@@ -70,6 +70,12 @@ class PCautoDealerModelSpider(RedisSpider):
 
     def get_vehicleModel(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        # save the bottom price url of vehicle serie
+        column_list = soup.find('dl', class_='clearfix btndls').find_all('a')
+        for column in column_list:
+            column_url = column.get('href')
+            yield Request(self.root_url + column_url, callback=self.get_url)
+        # get vehicle model
         vehicle_list = soup.find_all('dl', class_='chextab clearfix')
         for list in vehicle_list:
             vehicles = list.find_all('dd')
