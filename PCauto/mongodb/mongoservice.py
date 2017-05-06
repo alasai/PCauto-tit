@@ -133,6 +133,13 @@ def get_dealer_model():
             starturls.add(dealer['model_url'])
     return starturls
 
+def get_dealer_news():
+    collection = db['Dealer']
+    starturls = set()
+    for doc in collection.find({'news_url':{'$exists':True}},{'news_url':1,'_id':0}):
+        starturls.add(doc['news_url'])
+    return starturls
+
 def get_dealer_model_other():
     collection = db['DealerOther']
     starturls = set()
