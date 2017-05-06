@@ -13,7 +13,7 @@ from PCauto import pipelines
 
 class PCautoDealerOtherSpider(RedisSpider):
     name = 'PCauto_dealer_other'
-    pipeline = set([pipelines.DealerModelPipeline, ])
+    pipeline = set([pipelines.DealerOtherPipeline, ])
     fenqi_url = 'http://jr.pcauto.com.cn/autofinance/commorders/order.jsp?sgid=%s#ad=8303'
 
     def start_requests(self):
