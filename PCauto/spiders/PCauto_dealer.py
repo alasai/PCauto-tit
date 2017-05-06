@@ -116,7 +116,7 @@ class PCautoDealerSpider(RedisSpider):
                 save_result = json.loads(put_result)
                 mongoservice.save_dealer_other(save_result)
             else:
-                print 'topnav not exists.'
+                print 'topnav not exists. In page: <%s>' % response.url
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
