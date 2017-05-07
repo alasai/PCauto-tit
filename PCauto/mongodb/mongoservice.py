@@ -144,9 +144,8 @@ def get_dealer_model_other():
 def get_dealer_market():
     collection = db['Dealer']
     starturls = set()
-    for dealer in collection.find({}):
-        if 'market_url' in dealer.keys():
-            starturls.add(dealer['market_url'])
+    for doc in collection.find({'market_url':{'$exists':True}},{'market_url':1,'_id':0}):
+        starturls.add(doc['market_url'])
     return starturls
 
 def get_vehicleType():

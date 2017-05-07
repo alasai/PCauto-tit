@@ -21,10 +21,14 @@ class PCautoDealerMarketSpider(RedisSpider):
 
     def get_market_info(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
-        market_info_list = soup.find('ul', class_='cxyhlt clearfix').find_all('li')
-        for market_info in market_info_list:
-            href = market_info.find('div', class_='wbtag').find('a').get('href')
-            yield Request(href, callback=self.get_url)
+        markets_body = soup.find('ul', class_='cxyhlt clearfix')
+        if markets_body:
+            market_info_list = markets_body.find_all('li')
+            for market_info in market_info_list:
+                href = market_info.find('div', class_='wbtag').find('a').get('href')
+                yield Request(href, callback=self.get_url)
+        else:
+            print 'what the fuck page ! <%s>' % response.url
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
