@@ -40,10 +40,25 @@ class PCautoUsedcarSpider(RedisSpider):
         # usedcar_urls = mongoservice.get_usedcar_url()
         # for url in usedcar_urls:
         #     yield Request(url, callback=self.get_url)
-        yield Request(self.guazi_url, callback=self.get_page)
+        # yield Request(self.guazi_url, callback=self.get_page)
+        yield Request(self.guazi_url, callback=self.get_brand)
         # yield Request(self.guazi_url, headers=self.guazi_headers, callback=self.get_page)
 
+    def get_brand(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        brand_list = soup.find('ul',class_='o-b-list').find_all('a')
+        for brand in brand_list:
+            href = brand.get('href')
+            yield Request(self.api_url % href, dont_filter=True, callback=self.get_car_series)
+            yield Request(self.api_url % href, callback=self.get_url)
 
+    def get_car_series(self,response):
+        soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
+        series_list = soup.find('dd',class_='clickTagWidget').find_all('a')
+        for serie in series_list[1:]:
+            href = serie.get('href')
+            yield Request(self.api_url % href, dont_filter=True, callback=self.get_page)
+            yield Request(self.api_url % href, callback=self.get_url)
 
     def get_page(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')

@@ -154,7 +154,7 @@ USER_AGENTS = [
 
 LOG_STDOUT=True
 # LOG_FILE = './log.txt'
-LOG_LEVEL = 'INFO'
+# LOG_LEVEL = 'INFO'
 
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
