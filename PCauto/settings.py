@@ -107,6 +107,7 @@ ITEM_PIPELINES = {
    'PCauto.pipelines.ProductPipeline': 336,
    'PCauto.pipelines.ChepinPipeline': 337,
    'PCauto.pipelines.RankPipeline': 338,
+   'PCauto.pipelines.DealerOtherPipeline': 339,
 }
 
 USER_AGENTS = [
