@@ -21,9 +21,9 @@ class PCautoUsedcarSpider(RedisSpider):
 
 
     def start_requests(self):
-        usedcar_urls = mongoservice.get_usedcar_url()
-        for url in usedcar_urls:
-            yield Request(url, callback=self.get_url)
+        # usedcar_urls = mongoservice.get_usedcar_url()
+        # for url in usedcar_urls:
+        #     yield Request(url, callback=self.get_url)
         # yield Request(self.guazi_url, headers=self.guazi_headers, callback=self.get_page)
         # yield Request(self.guazi_url, callback=self.get_page)
         yield Request(self.guazi_url, callback=self.get_brand)
@@ -56,7 +56,8 @@ class PCautoUsedcarSpider(RedisSpider):
         if next_page:
             next_page_url = next_page.get('href')
             # yield Request(self.api_url % next_page_url, headers=self.guazi_headers, callback = self.get_page)
-            yield Request(self.api_url % next_page_url, callback = self.get_page)
+            yield Request(self.api_url % next_page_url, dont_filter=True, callback = self.get_page)
+            yield Request(self.api_url % next_page_url, callback=self.get_url)
 
     #
     # def get_vehicleList(self,response):
