@@ -49,7 +49,8 @@ class PCautoUsedcarSpider(RedisSpider):
         next_page = soup.find('div', class_='pageBox').find('a', class_='next')
         if next_page:
             next_page_url = next_page.get('href')
-            yield Request(self.api_url % next_page_url, callback = self.get_page)
+            yield Request(self.api_url % next_page_url, dont_filter=True, callback = self.get_page)
+            yield Request(self.api_url % next_page_url, callback=self.get_url)
 
     def get_url(self,response):
         soup = BeautifulSoup(response.body_as_unicode(), 'lxml')
